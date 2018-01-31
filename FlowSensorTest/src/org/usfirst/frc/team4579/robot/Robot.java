@@ -32,9 +32,9 @@ public class Robot extends IterativeRobot {
 	private String m_autoSelected;
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
 	SpeedController leftFront = new Victor(0);
-	SpeedController rightFront = new Victor(1);
-	SpeedController leftRear = new Victor(2);
-	SpeedController rightRear = new Victor(3);
+	SpeedController rightFront = new Victor(3);
+	SpeedController leftRear = new Victor(1);
+	SpeedController rightRear = new Victor(2);
 	MecanumDrive drive = new MecanumDrive(leftFront, leftRear, rightFront, rightRear);
 	Joystick stick = new Joystick(0);
 	
@@ -45,6 +45,7 @@ public class Robot extends IterativeRobot {
 		int count, accum = 0;
 		byte[] flowdata = new byte[2];
 		int deltaX, deltaY = 0;
+		System.out.println("Define th SPI port.");
 
 		// Write a register via the SPI port.
 		public void registerWrite(byte reg, byte value)  {
@@ -193,16 +194,17 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		//m_chooser.addDefault("Default Auto", kDefaultAuto);
-		//m_chooser.addObject("My Auto", kCustomAuto);
-		//SmartDashboard.putData("Auto choices", m_chooser);
+		m_chooser.addDefault("Default Auto", kDefaultAuto);
+		m_chooser.addObject("My Auto", kCustomAuto);
+		SmartDashboard.putData("Auto choices", m_chooser);
+		System.out.println("*** Robot Init running.")
 		
 		//Initialize the SPI Port
+		System.out.println("*** Starting FlowDeck Initialization...")
 		FlowDeck robotFlow = new FlowDeck();
 		boolean goodInit = robotFlow.init();
 		System.out.println(goodInit);
-		if (!goodInit) {}
-		drive.driveCartesian(stick.getY(), stick.getX(), 0.0);
+		if (!goodInit) {System.out.println("Chip Init failed!");}
 
 	}
 
@@ -246,7 +248,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		
+		drive.driveCartesian(stick.getY(), stick.getX(), 0.0);
+
 	}
 
 	/**
