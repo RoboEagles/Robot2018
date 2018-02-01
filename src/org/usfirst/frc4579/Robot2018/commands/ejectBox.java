@@ -12,7 +12,6 @@
 package org.usfirst.frc4579.Robot2018.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc4579.Robot2018.Robot;
-
 /**
  *
  */
@@ -41,6 +40,7 @@ public class ejectBox extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	Robot.gripper.eject(1.0);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -50,10 +50,12 @@ public class ejectBox extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	    	Robot.gripper.stop();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	end();
     }
 }
