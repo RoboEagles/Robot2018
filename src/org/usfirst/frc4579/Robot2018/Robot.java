@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import flowSensor.FlowMotion;
+
 import org.usfirst.frc4579.Robot2018.commands.*;
 import org.usfirst.frc4579.Robot2018.subsystems.*;
 
@@ -74,6 +76,8 @@ public class Robot extends TimedRobot {
         
         // Creating a camera and setting resolution
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+        camera.setResolution(426, 240);
+        
     }
     
 
@@ -96,6 +100,9 @@ public class Robot extends TimedRobot {
         autonomousCommand = chooser.getSelected();
         // schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.start();
+        
+        // Gets the game data needed for the autonomous period
+        final String gameData = DriverStation.getInstance().getGameSpecificMessage();
     }
 
     /**
