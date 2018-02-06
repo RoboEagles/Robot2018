@@ -51,7 +51,7 @@ public class driveTrain extends Subsystem {
     	double raw_y = Robot.oi.joystick.getY();
     	
     	// Filtering the values
-    	double x = (.5*last_x + .5*raw_x);
+    	double x = (.5*last_x + .5*raw_x)*.75;
     	double y = (.5*last_y + .5*raw_y);
     	
     	// Sending inputs to joystick
@@ -60,6 +60,11 @@ public class driveTrain extends Subsystem {
     	// Getting new reference points
     	last_x = x;
     	last_y = y;
+    }
+    
+    // Stops all the motors
+    public void stop(){
+    	robotDrive.stopMotor();
     }
     
     
