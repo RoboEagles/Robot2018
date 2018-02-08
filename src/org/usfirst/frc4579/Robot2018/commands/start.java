@@ -37,7 +37,24 @@ public class start extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+    	boolean inCenter = false;
+    	boolean inSide = false;
     	
+    	// Edits the direction according to what switch we are going for
+    	if (Robot.gameData == 'L') {
+    		int direction = 1;
+    	}
+    	else {
+    		int direction = -1;
+    	}
+    	
+    	// Checks whether to run the code for the center or side configurations
+    	if(Robot.switches.getSwitch() == "center") {
+    		inCenter = true;
+    	}
+    	else if(Robot.switches.getSwitch() == "sides"){
+    		inSide = true;
+    	}
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -48,7 +65,7 @@ public class start extends Command {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true
