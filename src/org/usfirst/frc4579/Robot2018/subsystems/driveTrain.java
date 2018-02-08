@@ -79,20 +79,20 @@ public class driveTrain extends Subsystem {
     
     public void joeyStickDrive() { //The finest drive code known to man.
 		
-    	//Read the gyro and the joystick.
+    	//Read the gyro and the driveStick.
 		double gz = Robot.measurement.getAngleRate();
 
-		double frwd = -Robot.oi.joystick.getY();	//forward-back joystick, speed control.
-		double turn = Robot.oi.joystick.getX();	    //left-right joystick, turn control.
+		double frwd = -Robot.oi.driveStick.getY();	//forward-back driveStick, speed control.
+		double turn = Robot.oi.driveStick.getX();	    //left-right driveStick, turn control.
 
-		//Lower limits for the joystick, stop the motors.
+		//Lower limits for the driveStick, stop the motors.
 		if (Math.abs(turn) < 0.04 && Math.abs(frwd) < 0.04) {
 			turn = 0.0;
 			frwd = 0.0;
 			gz = 0.0;
 		}
 		
-		//Decrease the low speed sensitivities of the joystick.
+		//Decrease the low speed sensitivities of the driveStick.
 		double frwd2 = Math.signum(frwd) * Math.pow(Math.abs(frwd), 1.5);
 		double turn2 = Math.signum(turn) * Math.pow(Math.abs(turn), 2.0);
 		
@@ -106,7 +106,7 @@ public class driveTrain extends Subsystem {
 		double vLeft = vLeftLPF.filter(frwd2 + turn2 / 2.0);
 		double vRite = vRiteLPF.filter(frwd2 - turn2 / 2.0);
 		
-		//Calculate the expected rotation rate.  93 in/sec (extrapolated full speed) converts the joystick 
+		//Calculate the expected rotation rate.  93 in/sec (extrapolated full speed) converts the driveStick 
 		//numbers to an expected speed value. The final equation is omega = (SpeedRite - SpeedLeft)/baseline.  
 		//omega is rotation in deg/sec.
 		double omega = Math.toDegrees((vRite - vLeft) * 93.0 / baseLine); 
@@ -137,16 +137,16 @@ public class driveTrain extends Subsystem {
     
     /*
     public void drive() {
-    	double x = Robot.oi.joystick.getX();//*drive_direction;
-    	double y = Robot.oi.joystick.getY();//*drive_direction;
+    	double x = Robot.oi.driveStick.getX();//*drive_direction;
+    	double y = Robot.oi.driveStick.getY();//*drive_direction;
     	double xsign = Math.signum(x);
     	double ysign = Math.signum(y);
-    	final double slider = Robot.oi.joystick.getRawAxis(2) / 2;
+    	final double slider = Robot.oi.driveStick.getRawAxis(2) / 2;
     	double sensitivity = 0.5 - slider;
     	//arcadeDriveCustom(x, y, true);
     	robotDrive.arcadeDrive(Math.pow(x*sensitivity, 2)*xsign/3, Math.pow(y*sensitivity, 2)*ysign*drive_direction, false);
-    	SmartDashboard.putNumber("Joystick x-value", Robot.oi.joystick.getX());
-    	SmartDashboard.putNumber("Joystick y-value", Robot.oi.joystick.getY());
+    	SmartDashboard.putNumber("driveStick x-value", Robot.oi.driveStick.getX());
+    	SmartDashboard.putNumber("driveStick y-value", Robot.oi.driveStick.getY());
     }
     */
     

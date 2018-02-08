@@ -310,7 +310,7 @@ Children:
         validators: null
         value: []
       I: !!robotbuilder.data.properties.DoubleProperty {default: 0, name: I, validators: null,
-        value: 0.0}
+        value: 0.07}
       Minimum Input: !!robotbuilder.data.properties.DoubleProperty {default: 0, name: Minimum Input,
         validators: null, value: 0.0}
       Limit Input: !!robotbuilder.data.properties.BooleanProperty {default: false,
@@ -318,7 +318,7 @@ Children:
       Minimum Output: !!robotbuilder.data.properties.DoubleProperty {default: -1,
         name: Minimum Output, validators: null, value: -1.0}
       P: !!robotbuilder.data.properties.DoubleProperty {default: 1, name: P, validators: null,
-        value: 1.0}
+        value: 0.1}
       Input: !!robotbuilder.data.properties.ChildSelectionProperty
         default: 0
         name: Input
@@ -345,11 +345,21 @@ Children:
   Base: Subsystems
   Name: Subsystems
 - Children:
+  - Children: []
+    Properties:
+      Number: !!robotbuilder.data.properties.ChoicesProperty
+        choices: &id010 ['0', '1', '2', '3', '4', '5']
+        default: 1
+        name: Number
+        validators: &id011 [Joystick]
+        value: '0'
+    Base: Joystick
+    Name: driveStick
   - Children:
     - Children: []
       Properties:
         Joystick: !!robotbuilder.data.properties.ParentProperty {default: parent,
-          name: Joystick, validators: null, value: joystick}
+          name: Joystick, validators: null, value: everyStick}
         Parameters: !!robotbuilder.data.properties.ParametersProperty
           default: []
           name: Parameters
@@ -380,7 +390,7 @@ Children:
     - Children: []
       Properties:
         Joystick: !!robotbuilder.data.properties.ParentProperty {default: parent,
-          name: Joystick, validators: null, value: joystick}
+          name: Joystick, validators: null, value: everyStick}
         Parameters: !!robotbuilder.data.properties.ParametersProperty
           default: []
           name: Parameters
@@ -408,13 +418,13 @@ Children:
       Name: ejectButton
     Properties:
       Number: !!robotbuilder.data.properties.ChoicesProperty
-        choices: ['0', '1', '2', '3', '4', '5']
+        choices: *id010
         default: 1
         name: Number
-        validators: [Joystick]
-        value: '0'
+        validators: *id011
+        value: '1'
     Base: Joystick
-    Name: joystick
+    Name: everyStick
   Properties: {}
   Base: OI
   Name: Operator Interface
@@ -508,7 +518,7 @@ Children:
     Base: Command
     Name: ejectBox
   - Children: []
-    Properties: &id013
+    Properties: &id015
       Autonomous Selection: !!robotbuilder.data.properties.BooleanProperty {default: false,
         name: Autonomous Selection, validators: null, value: true}
       Parameters: !!robotbuilder.data.properties.ParametersProperty
@@ -550,9 +560,9 @@ Children:
         name: Commands
         validators: [List]
         value:
-        - &id012 !!robotbuilder.data.CommandGroupEntry
+        - &id014 !!robotbuilder.data.CommandGroupEntry
           command:
-            base: &id011
+            base: &id013
               help: A command specifies an action that the robot can perform.
               name: Command
               properties:
@@ -566,10 +576,10 @@ Children:
                 validators: null
                 value: []
               - !!robotbuilder.data.properties.ParameterSetProperty
-                default: &id010 []
+                default: &id012 []
                 name: Parameter presets
                 validators: null
-                value: *id010
+                value: *id012
               - !!robotbuilder.data.properties.BooleanProperty {default: false, name: Run When Disabled,
                 validators: null, value: false}
               - !!robotbuilder.data.properties.BooleanProperty {default: false, name: Autonomous Selection,
@@ -577,7 +587,7 @@ Children:
               supports: {}
               type: Command
             name: start
-            properties: &id015
+            properties: &id017
               Autonomous Selection: !!robotbuilder.data.properties.BooleanProperty {
                 default: false, name: Autonomous Selection, validators: null, value: false}
               Parameters: !!robotbuilder.data.properties.ParametersProperty
@@ -606,9 +616,9 @@ Children:
           previous: null
         - !!robotbuilder.data.CommandGroupEntry
           command:
-            base: *id011
+            base: *id013
             name: centerAuto
-            properties: &id014
+            properties: &id016
               Autonomous Selection: !!robotbuilder.data.properties.BooleanProperty {
                 default: false, name: Autonomous Selection, validators: null, value: true}
               Parameters: !!robotbuilder.data.properties.ParametersProperty
@@ -634,12 +644,12 @@ Children:
             name: ParametersProperty
             validators: null
             value: []
-          previous: *id012
+          previous: *id014
         - !!robotbuilder.data.CommandGroupEntry
           command:
-            base: *id011
+            base: *id013
             name: sideAuto
-            properties: *id013
+            properties: *id015
           hasMatch: true
           order: Parallel
           parameters:
@@ -647,19 +657,41 @@ Children:
             name: ParametersProperty
             validators: null
             value: []
-          previous: *id012
+          previous: *id014
       Button on SmartDashboard: !!robotbuilder.data.properties.BooleanProperty {default: true,
         name: Button on SmartDashboard, validators: null, value: true}
     Base: Command Group
     Name: autonomous
   - Children: []
-    Properties: *id014
+    Properties: *id016
     Base: Command
     Name: centerAuto
   - Children: []
-    Properties: *id015
+    Properties: *id017
     Base: Command
     Name: start
+  - Children: []
+    Properties:
+      Autonomous Selection: !!robotbuilder.data.properties.BooleanProperty {default: false,
+        name: Autonomous Selection, validators: null, value: false}
+      Parameters: !!robotbuilder.data.properties.ParametersProperty
+        default: []
+        name: Parameters
+        validators: null
+        value: []
+      Run When Disabled: !!robotbuilder.data.properties.BooleanProperty {default: false,
+        name: Run When Disabled, validators: null, value: false}
+      Requires: !!robotbuilder.data.properties.TypeSelectionProperty {default: None,
+        name: Requires, type: Subsystem, validators: null, value: None}
+      Parameter presets: !!robotbuilder.data.properties.ParameterSetProperty
+        default: []
+        name: Parameter presets
+        validators: null
+        value: []
+      Button on SmartDashboard: !!robotbuilder.data.properties.BooleanProperty {default: true,
+        name: Button on SmartDashboard, validators: null, value: true}
+    Base: Command
+    Name: changeGoal
   Properties: {}
   Base: Commands
   Name: Commands
@@ -687,6 +719,6 @@ Properties:
     extension: null, folder: true, name: Wiring file location, validators: null, value: 'C:\Users\suhey\Robotics
       Wiring'}
   Autonomous Command: !!robotbuilder.data.properties.TypeSelectionProperty {default: None,
-    name: Autonomous Command, type: Command, validators: null, value: Autonomous Command}
+    name: Autonomous Command, type: Command, validators: null, value: autonomous}
 Base: Robot
 Name: Robot2018
