@@ -37,6 +37,13 @@ public class sideAuto extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+    	// Edits the direction according to what switch we are going for
+    	if (Robot.gameData == 'L') {
+    		int direction = 1;
+    	}
+    	else {
+    		int direction = -1;
+    	}
     }
 
     // Called repeatedly when this Command is scheduled to run
