@@ -166,11 +166,6 @@ public class MPU6050_I2C {
 		
         mpuAvailable = true;
 	
-		xAccelData.computeRawAndScaledValue( READS[0] , READS[1] , accelScaleFactor); //Convert the int's to scaled values.
-		yAccelData.computeRawAndScaledValue( READS[2] , READS[3] , accelScaleFactor);
-		zAccelData.computeRawAndScaledValue( READS[4] , READS[5] , accelScaleFactor);
-		xGyroData .computeRawAndScaledValue( READS[8] , READS[9] , gyroScaleFactor);
-		yGyroData .computeRawAndScaledValue( READS[10], READS[11], gyroScaleFactor);
 		zGyroData .computeRawAndScaledValue( READS[12], READS[13], gyroScaleFactor);
 		
 		int temp = ((int)READS[6] << 8) | (READS[7] & 0xff);
@@ -229,39 +224,10 @@ public class MPU6050_I2C {
 
 	}
 
-	//Return the X acceleration in g's.
-	public double getAccelX() {
-		return xAccelData.axisFilteredValue();
-	}
-	
-	//Return the Y acceleration in g's
-	public double getAccelY() {
-		return yAccelData.axisFilteredValue();
-	}
-	
-	//Return the Z acceleration in g's
-	public double getAccelZ() {
-		return zAccelData.axisFilteredValue();		
-	}
-	
-	//Return the X gyro value in deg/sec
-	public double getGyroRateX() {
-		return xGyroData.axisFilteredValue();
-	}
-	
-	//Return the Y gyro value in deg/sec
-	public double getGyroRateY() {
-		return yGyroData.axisFilteredValue();
-	}
 	
 	//	Return the Z gyro value in deg/sec, 
 	public double getGyroRateZ() {
 		return zGyroData.axisFilteredValue();
-	}
-	
-	//	Return the temperature of the MPU in degrees f
-	public double getTemp() { // degrees F
-		return tempF;
 	}
 	
 	/***********************************************************************************

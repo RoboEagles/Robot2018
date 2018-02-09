@@ -59,7 +59,7 @@ public class RobotMap {
         driveTrainrobotDrive = new DifferentialDrive(driveTrainleftMotor, driveTrainrightMotor);
         LiveWindow.addActuator("driveTrain", "robotDrive", driveTrainrobotDrive);
         driveTrainrobotDrive.setSafetyEnabled(true);
-        driveTrainrobotDrive.setExpiration(0.1);
+        driveTrainrobotDrive.setExpiration(0.5);
         driveTrainrobotDrive.setMaxOutput(1.0);
 
         gripperrightGripper = new PWMVictorSPX(3);
