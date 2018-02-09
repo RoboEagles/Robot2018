@@ -81,7 +81,7 @@ public class driveTrain extends Subsystem {
 		
     	//Read the gyro and the driveStick.
 		double gz = Robot.measurement.getAngleRate();
-
+		gz = 0;
 		double frwd = -Robot.oi.driveStick.getY();	//forward-back driveStick, speed control.
 		double turn = Robot.oi.driveStick.getX();	    //left-right driveStick, turn control.
 

@@ -37,6 +37,8 @@ public class grabBox extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	setTimeout(3);
+    	Robot.gripper.openGripper();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -46,11 +48,17 @@ public class grabBox extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
+    	if(isTimedOut()){
+    		return true;
+    	}
+    	else{
         return false;
+    	}
     }
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.gripper.closeGripper();
     	Robot.gripper.stop();
     }
 
