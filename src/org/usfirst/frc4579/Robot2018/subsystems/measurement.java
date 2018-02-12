@@ -17,7 +17,6 @@ import org.usfirst.frc4579.instrumentation.DebugTextFile;
 import org.usfirst.frc4579.instrumentation.Instrumentation;
 
 import com.eagles.sensors.MPU6050_I2C;
-import com.eagles.sensors.VL53LOX_I2C;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -169,10 +168,10 @@ public class measurement extends Subsystem {
 		// Compute new angular data.
 		robotAngleRateZ = mpu.getGyroRateZ();
 		robotAngleZ    += robotAngleRateZ * deltaT;
-		double angleRateY = mpu.getGyroRateY();
-		robotAngleY    += angleRateY * deltaT;
-		double angleRateX = mpu.getGyroRateX();
-		robotAngleX    += angleRateX * deltaT;
+		//double angleRateY = mpu.getGyroRateY();
+		//robotAngleY    += angleRateY * deltaT;
+		//double angleRateX = mpu.getGyroRateX();
+		//robotAngleX    += angleRateX * deltaT;
 		
 		/*
 		// Compute the relative motion to absolute field coordinates.

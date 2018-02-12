@@ -58,7 +58,7 @@ public class RobotMap {
         driveTrainrightMotor.setInverted(true);
         driveTrainrobotDrive = new DifferentialDrive(driveTrainleftMotor, driveTrainrightMotor);
         LiveWindow.addActuator("driveTrain", "robotDrive", driveTrainrobotDrive);
-        driveTrainrobotDrive.setSafetyEnabled(true);
+        driveTrainrobotDrive.setSafetyEnabled(false);
         driveTrainrobotDrive.setExpiration(0.5);
         driveTrainrobotDrive.setMaxOutput(1.0);
 

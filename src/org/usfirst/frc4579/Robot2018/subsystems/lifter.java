@@ -60,8 +60,10 @@ public class lifter extends PIDSubsystem {
         
     }
 
+    
+    
     int currentGoal = 0;
-    double height[] = {0,234,324};
+    double heightGoals[] = {0,234,324};
     
     public void changeGoal() {
     	if(currentGoal>=2) {
@@ -73,7 +75,7 @@ public class lifter extends PIDSubsystem {
     }
     
     public void incrementLift() {
-    	setSetpoint(height[currentGoal]);
+    	setSetpoint(heightGoals[currentGoal]);
     }
     
     
