@@ -11,6 +11,8 @@
 
 package org.usfirst.frc4579.Robot2018.commands;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc4579.Robot2018.Robot;
 import org.usfirst.frc4579.instrumentation.EventLogging;
 
@@ -43,14 +45,18 @@ public class drive extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
 
-    	EventLogging.logNormalEvent(EventLogging.NORMALEVENTS.START_EXECUTE_COMMAND, "DefaultDrive");
+    	//EventLogging.logNormalEvent(EventLogging.NORMALEVENTS.START_EXECUTE_COMMAND, "DefaultDrive");
     	
     	// Update IMU data.
     	Robot.measurement.measure();
     	
     	Robot.driveTrain.joeyStickDrive();
     	
-    	EventLogging.logNormalEvent(EventLogging.NORMALEVENTS.END_EXECUTE_COMMAND,   "DefaultDrive");
+    	SmartDashboard.putNumber("Joystick X:", Robot.oi.driveStick.getX());
+    	SmartDashboard.putNumber("Joystick Y:", Robot.oi.driveStick.getY());
+
+    	
+    	//EventLogging.logNormalEvent(EventLogging.NORMALEVENTS.END_EXECUTE_COMMAND,   "DefaultDrive");
 
     }
 

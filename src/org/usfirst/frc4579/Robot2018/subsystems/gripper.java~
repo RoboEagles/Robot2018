@@ -41,6 +41,13 @@ public class gripper extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
     
+    public void openGripper(){
+    	movementMotor.set(.5);
+    }
+    
+    public void closeGripper(){
+    	movementMotor.set(-.5);
+    }
     
     public void grab(double speed){
     	// Runs both motors in one direction

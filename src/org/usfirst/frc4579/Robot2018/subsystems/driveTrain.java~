@@ -44,7 +44,7 @@ public class driveTrain extends Subsystem {
     public String pidMode = "rotate";
     public final double TURN_SPEED = 0.12;
 
-    final double baseLine = 19.5; // inches
+    final double baseLine = 23.125; // inches
     
     private FirstOrderLPF vLeftLPF = new FirstOrderLPF(0.7);
     private FirstOrderLPF vRiteLPF = new FirstOrderLPF(0.7);
@@ -62,16 +62,6 @@ public class driveTrain extends Subsystem {
 		SmartDashboard.putNumber("RIGHT MOTOR SCALE FACTOR", 0.0);
     }*/
     
-    protected static double limit(double num) {
-        if (num > 1.0) {
-          return 1.0;
-        }
-        if (num < -1.0) {
-          return -1.0;
-        }
-        return num;
-      }
-    
     // Return true if the motors are commanded to zero.
     public boolean isNotMoving() {
     	return (leftMotor.get() == 0.0) && (rightMotor.get() == 0.0);
@@ -81,7 +71,6 @@ public class driveTrain extends Subsystem {
 		
     	//Read the gyro and the driveStick.
 		double gz = Robot.measurement.getAngleRate();
-
 		double frwd = -Robot.oi.driveStick.getY();	//forward-back driveStick, speed control.
 		double turn = Robot.oi.driveStick.getX();	    //left-right driveStick, turn control.
 
@@ -129,54 +118,70 @@ public class driveTrain extends Subsystem {
 		
 	}  
     
-    // Drive each motor at the indicated speed.
-    public void driveEachMotor (double leftMotorSpeed, double rightMotorSpeed) {
-    	leftMotor .set(leftMotorSpeed);
-    	rightMotor.set(rightMotorSpeed);
-    }
-    
-    /*
-    public void drive() {
-    	double x = Robot.oi.driveStick.getX();//*drive_direction;
-    	double y = Robot.oi.driveStick.getY();//*drive_direction;
-    	double xsign = Math.signum(x);
-    	double ysign = Math.signum(y);
-    	final double slider = Robot.oi.driveStick.getRawAxis(2) / 2;
-    	double sensitivity = 0.5 - slider;
-    	//arcadeDriveCustom(x, y, true);
-    	robotDrive.arcadeDrive(Math.pow(x*sensitivity, 2)*xsign/3, Math.pow(y*sensitivity, 2)*ysign*drive_direction, false);
-    	SmartDashboard.putNumber("driveStick x-value", Robot.oi.driveStick.getX());
-    	SmartDashboard.putNumber("driveStick y-value", Robot.oi.driveStick.getY());
-    }
-    */
+    public void joeyAutoDrive(int x, int y) { //The second finest drive code known to man.
+		
+    	//Read the gyro and the driveStick.
+		double gz = Robot.measurement.getAngleRate();
+		gz = 0.0;
+		double frwd = x;
+		double turn = y;
+
+		//Lower limits for the driveStick, stop the motors.
+		if (Math.abs(turn) < 0.04 && Math.abs(frwd) < 0.04) {
+			turn = 0.0;
+			frwd = 0.0;
+			gz = 0.0;
+		}
+		
+		//Decrease the low speed sensitivities of the driveStick.
+		double frwd2 = Math.signum(frwd) * Math.pow(Math.abs(frwd), 1.5);
+		double turn2 = Math.signum(turn) * Math.pow(Math.abs(turn), 2.0);
+		
+		//Limit the control amount at high and low speeds, to avoid spinouts.
+		double maxSens = 0.55;
+		double minSens = 0.2;
+		double sensitivity = maxSens - Math.abs(frwd2) * (maxSens - minSens);
+		turn2 = turn2 * sensitivity;
+		
+		//Low pass filter the speed settings to the drive motors.
+		double vLeft = vLeftLPF.filter(frwd2 + turn2 / 2.0);
+		double vRite = vRiteLPF.filter(frwd2 - turn2 / 2.0);
+		
+		//Calculate the expected rotation rate.  93 in/sec (extrapolated full speed) converts the driveStick 
+		//numbers to an expected speed value. The final equation is omega = (SpeedRite - SpeedLeft)/baseline.  
+		//omega is rotation in deg/sec.
+		double omega = Math.toDegrees((vRite - vLeft) * 93.0 / baseLine); 
+		
+		//Calculate the two wheel correction factor.
+		double correction  = (omega - gz) * 0.008 / 2.0;
+		double vRite2 = vRite + correction;
+		double vLeft2 = vLeft - correction;
+		
+		//Normalize the wheel speeds to stay within +/-1.0;
+		double magMax = Math.max(Math.abs(vRite2), Math.abs(vLeft2));
+		if (magMax > 1.0) {
+			vRite2 /= magMax;
+			vLeft2 /= magMax;
+		}
+		
+		//Set the two motor speeds.
+		rightMotor.set(vRite2);
+		leftMotor.set(vLeft2);
+		
+	}  
     
     public void driveStraight(double speed) {
 	    double halfCorrection = ((Robot.measurement.getAngleRate() * .006) + (Robot.measurement.getAngle() * .016)) /2.0;
-	    Robot.driveTrain.driveEachMotor(speed + halfCorrection, speed - halfCorrection);
+	    leftMotor.set(speed + halfCorrection);
+	    rightMotor.set(speed - halfCorrection);
     }
     
     public void stop(){
     	leftMotor.stopMotor();
     	rightMotor.stopMotor();
     }
-    //These methods reverse the direction that the robot drives in.
-    public void reverseDrive() {
-    	System.out.println("Setting drive to reverse");
-    	drive_direction = -1;
-    }
-    public void forwardDrive() {
-    	System.out.println("Setting drive to forward");
-    	drive_direction = 1;
-    }
     
-    //This method continuously turns the robot at a set speed.
-    public void continuousTurn(String dir) {
-    	if (dir == "left") {
-    		driveEachMotor(-TURN_SPEED, TURN_SPEED);
-    	} else if (dir == "right") {
-    		driveEachMotor(TURN_SPEED, -TURN_SPEED); 
-    	}
-    }
+    
     
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
