@@ -11,6 +11,8 @@
 
 package org.usfirst.frc4579.Robot2018.commands;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc4579.Robot2018.Robot;
 
 /**
@@ -41,22 +43,27 @@ public class lift extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.lifter.setSetpoint(Robot.oi.everyStick.getThrottle()*maxHeight);
+    	System.out.println("Lifting");
+    	Robot.lifter.testUp();
+    	Robot.lifter.updateHeight();
+    	SmartDashboard.putNumber("IRValue", (double)Robot.lifter.getHeight());
+    	//Robot.lifter.setSetpoint(Robot.oi.everyStick.getThrottle()*maxHeight);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	
         return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.lifter.stopLift();
     	
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	end();
     }
 }

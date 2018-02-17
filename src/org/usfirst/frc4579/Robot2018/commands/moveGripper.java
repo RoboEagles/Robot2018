@@ -38,11 +38,19 @@ public class moveGripper extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+    	setTimeout(.05);
+    		
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+    	if(Robot.oi.everyStick.getRawButton(4)){
+			Robot.gripper.openGripper();
+		}
+		else{
+			Robot.gripper.closeGripper();
+		}
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -54,11 +62,17 @@ public class moveGripper extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
+    	/*setTimeout(1);
+    	while(!isTimedOut()){
+    		Robot.gripper.closeGripper();
+    	}*/
+    	Robot.gripper.stopMovement();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+    	end();
     }
 }
