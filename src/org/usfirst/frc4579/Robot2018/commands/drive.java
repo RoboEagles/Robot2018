@@ -40,13 +40,20 @@ public class drive extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.measurement.initFlowMotion();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
 
-    	//EventLogging.logNormalEvent(EventLogging.NORMALEVENTS.START_EXECUTE_COMMAND, "DefaultDrive");
+    	EventLogging.logNormalEvent(EventLogging.NORMALEVENTS.START_EXECUTE_COMMAND, "DefaultDrive");
     	
+    	Robot.measurement.getCounts();
+    	
+    	SmartDashboard.putNumber("Flow Motion X: ", Robot.measurement.getFlowMotionX());
+
+    	SmartDashboard.putNumber("Flow Motion Y: ", Robot.measurement.getFlowMotionY());
+
     	// Update IMU data.
     	Robot.measurement.measure();
     	
@@ -56,7 +63,7 @@ public class drive extends Command {
     	SmartDashboard.putNumber("Joystick Y:", Robot.oi.driveStick.getY());
 
     	
-    	//EventLogging.logNormalEvent(EventLogging.NORMALEVENTS.END_EXECUTE_COMMAND,   "DefaultDrive");
+    	EventLogging.logNormalEvent(EventLogging.NORMALEVENTS.END_EXECUTE_COMMAND,   "DefaultDrive");
 
     }
 

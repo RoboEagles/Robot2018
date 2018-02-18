@@ -41,7 +41,21 @@ public class gripper extends Subsystem {
     // here. Call these from Commands.
     
     
+    boolean firstOpen = true;
+    
     //----------------- Methods for the Movement Motor -----------------------//
+    public boolean isFirstOpen(){
+    	if(firstOpen){
+    		firstOpen = false;
+    		return true;
+    	}
+    	return firstOpen;
+    }
+    
+    public void reset(){
+    	firstOpen = true;
+    }
+    
     public void openGripper(){
     	movementMotor.set(.75);
     }

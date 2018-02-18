@@ -16,6 +16,11 @@ public class FlowMotion extends SensorBase  {
 	public int accumDeltaX, accumDeltaY = 0;				//Accumulated readings.
 	public double rateX, rateY = 0.0;						//Calculated instantaneous motion rate, counts/sec.
 	
+	public void reset(){
+		accumDeltaX = 0;
+		accumDeltaY = 0;
+	}
+	
 	public void getCounts() {
 		final double newTime, deltaTime, oldTime = 0.0;		//delta time variables.
 		newTime = Timer.getFPGATimestamp();	
@@ -25,11 +30,19 @@ public class FlowMotion extends SensorBase  {
 			flow.transaction(regBuffer, regBuffer, 2);  //Do the SPI transaction.
 			counts[i] = regBuffer.get(1);               //Get the returned byte into the array.
 		}
+		//Diagnostic: print the byte at Reg 02.
+		System.out.printf("Motion byte: %02x", counts[0]);
 		//Convert the returned bytes to signed int's.
 		deltaX = (counts[2] << 8) | (counts[1] & 0x000000FF);
 		deltaY = (counts[4] << 8) | (counts[3] & 0x000000FF);
-		if (Math.abs(deltaX) > 200)  deltaX = oldDeltaX;	//Reject spurious readings.
-		if (Math.abs(deltaY) > 200)  deltaY = oldDeltaY;
+		if (Math.abs(deltaX) > 124)  {
+			deltaX = oldDeltaX;	//Reject spurious readings.
+			System.out.println("*** Max deltaX!");
+		}
+		if (Math.abs(deltaY) > 124)  {
+			deltaY = oldDeltaY;
+			System.out.println("*** Max deltaY!");
+		}
 		oldDeltaX = deltaX;									//Save the newest readings.
 		oldDeltaY = deltaY;
 		accumDeltaX += deltaX;								//Accumulate the latest readings.
@@ -55,7 +68,7 @@ public class FlowMotion extends SensorBase  {
 		flow.setMSBFirst();
 		flow.resetAccumulator();
 		flow.freeAuto();
-		//System.out.println("End of SPI set up.");
+		System.out.println("End of SPI set up.");
 		// Power on reset the sensor.
 		regBuffer.put(0, (byte)0x3A);				//Send these two addresses to the Flow Breakout to POR.
 		regBuffer.put(1, (byte)0x5A);
@@ -67,18 +80,19 @@ public class FlowMotion extends SensorBase  {
 	    // Test the SPI communication, checking chipId and inverse chipId
 		regBuffer.put(0, (byte)0x00);
 		flow.transaction(regBuffer, regBuffer, 2);
-		//System.out.printf("chipId:  %02x    %02x\n", (byte)0x49, regBuffer.get(1));
+		System.out.printf("chipId:  %02x    %02x\n", (byte)0x49, regBuffer.get(1));
 		byte chipId = regBuffer.get(1);
 		
 		regBuffer.put(0, (byte)0x5F);
 		flow.transaction(regBuffer, regBuffer, 2); 
-		//System.out.printf("dIpihc:  %02x    %02x\n", (byte)0xB6, regBuffer.get(1));
+		System.out.printf("dIpihc:  %02x    %02x\n", (byte)0xB6, regBuffer.get(1));
 		byte dIpihc = regBuffer.get(1);
 		
 		if (chipId == (byte)0x49 && dIpihc == (byte)0xB6) {
-			//System.out.println("Motion Sensor is on line!");
+			System.out.println("Motion Sensor is on line!");
 			//Read one set of counts to initialize (per Arduino code).
 			getCounts();
+		
 			Timer.delay(0.001);
 			registerWrite((byte)0x7F, (byte)0x00);
 		    registerWrite((byte)0x61, (byte)0xAD);
@@ -154,7 +168,7 @@ public class FlowMotion extends SensorBase  {
 		    registerWrite((byte)0x4E, (byte)0xA8);
 		    registerWrite((byte)0x5A, (byte)0x50);
 		    registerWrite((byte)0x40, (byte)0x80);
-		    //System.out.println("End of sensor performance settings.");
+		    System.out.println("End of sensor performance settings.");
 			return true;
 		}
 		return false;

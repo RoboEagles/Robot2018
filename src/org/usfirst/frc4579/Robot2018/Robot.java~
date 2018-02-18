@@ -92,7 +92,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit(){
-
+    	//Robot.lifter.toStart();
+    	Robot.lifter.resetCounter();
     }
 
     @Override
@@ -114,12 +115,12 @@ public class Robot extends TimedRobot {
     	boolean inSide = false;
     	
     	// Checks whether to run the code for the center or side configurations
-    	if(RobotMap.switchescenterSwitch.get()) {
+    	/*if(RobotMap.switchescenterSwitch.get()) {
     		inCenter = true;
     	}
     	else if(RobotMap.switchesleftSwitch.get() || RobotMap.switchesrightSwitch.get()){
     		inSide = true;
-    	}
+    	}*/
     	
     	// Edits the direction according to what switch we are going for
     	if (Robot.gameData == 'L') {
