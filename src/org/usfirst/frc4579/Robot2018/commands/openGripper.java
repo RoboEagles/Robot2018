@@ -39,7 +39,7 @@ public class openGripper extends Command {
     @Override
     protected void initialize() {
     	if (Robot.gripper.isFirstOpen()) setTimeout(.27);
-    	else setTimeout(.1);
+    	else setTimeout(.13);
     	System.out.println("Starting .1 Sec Timeout");
     }
 

@@ -45,9 +45,9 @@ public class lift extends Command {
     protected void execute() {
     	System.out.println("Lifting");
     	Robot.lifter.testUp();
-    	Robot.lifter.updateHeight();
-    	SmartDashboard.putNumber("IRValue", (double)Robot.lifter.getHeight());
-    	//Robot.lifter.setSetpoint(Robot.oi.everyStick.getThrottle()*maxHeight);
+    	//SmartDashboard.putNumber("IRValue", (double)Robot.lifter.getHeight());
+    	//double goal = (Robot.oi.everyStick.getThrottle() + 1)/2 * Robot.lifter.maxHeight;
+    	//Robot.lifter.setSetpoint(goal);
     }
 
     // Make this return true when this Command no longer needs to run execute()

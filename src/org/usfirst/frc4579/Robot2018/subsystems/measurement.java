@@ -158,7 +158,7 @@ public class measurement extends Subsystem {
 	
 	// Compute accelerometer and range data.
 	public void measure() {
-	
+	System.out.println(mpuAvailable);
 		if (mpuAvailable) {
 		
 		// Compute change in time since last computations.
@@ -168,9 +168,10 @@ public class measurement extends Subsystem {
 			firstCall = false;
 		}
 		double deltaT = time - lastTime;
+		System.out.println(deltaT);
 		
 		lastTime = time;
-		
+
 		
 		/*
 		// Compute new distance vector.
@@ -185,6 +186,7 @@ public class measurement extends Subsystem {
 		// Compute new angular data.
 		robotAngleRateZ = mpu.getGyroRateZ();
 		robotAngleZ    += robotAngleRateZ * deltaT;
+		System.out.println(robotAngleRateZ);
 		//double angleRateY = mpu.getGyroRateY();
 		//robotAngleY    += angleRateY * deltaT;
 		//double angleRateX = mpu.getGyroRateX();

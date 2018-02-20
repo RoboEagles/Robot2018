@@ -10,7 +10,7 @@ public class FlowMotion extends SensorBase  {
 	// Variables for the SPI interface and sensor data.
 	private SPI flow = new SPI(SPI.Port.kOnboardCS0);
 	private ByteBuffer regBuffer = ByteBuffer.allocate(2);  //SPI transaction buffer.
-	private byte[] counts = new byte[5];					//Byte buffer from received data.
+	private byte[] counts = new byte[5];					//Byte buffer for received data.
 	private int oldDeltaX, oldDeltaY;						//Previous readings.
 	public int deltaX, deltaY;								//Current readings.
 	public int accumDeltaX, accumDeltaY = 0;				//Accumulated readings.
@@ -31,18 +31,22 @@ public class FlowMotion extends SensorBase  {
 			counts[i] = regBuffer.get(1);               //Get the returned byte into the array.
 		}
 		//Diagnostic: print the byte at Reg 02.
-		System.out.printf("Motion byte: %02x", counts[0]);
 		//Convert the returned bytes to signed int's.
 		deltaX = (counts[2] << 8) | (counts[1] & 0x000000FF);
 		deltaY = (counts[4] << 8) | (counts[3] & 0x000000FF);
+		//Test for motion, and zero the data if none.
+ 		if ((byte)(counts[0] & 0x80) != (byte)0x80) {
+ 			deltaX = 0;
+ 			deltaY = 0;
+ 		}
 		if (Math.abs(deltaX) > 124)  {
 			deltaX = oldDeltaX;	//Reject spurious readings.
-			System.out.println("*** Max deltaX!");
+			System.out.printf("*** Max deltaX!  %02x%02x%02x%02x%02x\n", (byte)counts[0], (byte)counts[1], (byte)counts[2], (byte)counts[3], (byte)counts[4]);
 		}
-		if (Math.abs(deltaY) > 124)  {
-			deltaY = oldDeltaY;
-			System.out.println("*** Max deltaY!");
-		}
+//		if (Math.abs(deltaY) > 124)  {
+//			deltaY = oldDeltaY;
+//			System.out.printf("*** Max deltaX!  %02x%02x%02x%02x%02x\n", (byte)counts[0], (byte)counts[1], (byte)counts[2], (byte)counts[3], (byte)counts[4]);
+//		}
 		oldDeltaX = deltaX;									//Save the newest readings.
 		oldDeltaY = deltaY;
 		accumDeltaX += deltaX;								//Accumulate the latest readings.

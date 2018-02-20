@@ -112,17 +112,21 @@ public class driveTrain extends Subsystem {
 			vLeft2 /= magMax;
 		}
 		
+		// Sets the speed scaling of the robot
+		double speed = (-Robot.oi.driveStick.getThrottle() + 1) / 2;
+		
 		//Set the two motor speeds.
-		rightMotor.set(vRite2);
-		leftMotor.set(vLeft2);
+		rightMotor.set(vRite2 * speed);
+		leftMotor.set(vLeft2 * speed);
 		
 	}  
     
-    public void joeyAutoDrive(int x, int y) { //The second finest drive code known to man.
+    public void joeyAutoDrive(double x, double y) { //The second finest drive code known to man.
 		
     	//Read the gyro and the driveStick.
 		double gz = Robot.measurement.getAngleRate();
-		gz = 0.0;
+//		gz = 0.0;
+//		System.out.println(gz);
 		double frwd = x;
 		double turn = y;
 
