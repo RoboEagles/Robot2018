@@ -260,6 +260,10 @@ public class measurement extends Subsystem {
 	}
 	*/
 	
+	public void read(boolean isNotMoving, double timeNow){
+		mpu.read(isNotMoving, timeNow);
+	}
+	
 	// Returns the robot angular displacement from its original placement (in degrees).
 	public double getAngle() {
 		return robotAngleZ;

@@ -65,6 +65,7 @@ public class gripper extends Subsystem {
     	movementMotor.set(-.75);
     }
     
+    //----------------------- Methods for Holdng the Cube ------------------------//
     public boolean isHolding(){
     	return holding;
     }
@@ -77,7 +78,7 @@ public class gripper extends Subsystem {
     
     // Has the arm hold the box
     public void holdingBox(){
-    	if(holding)movementMotor.set(-.05);
+    	if(holding)movementMotor.set(-.1);
     }
     
     // Stops the movement motor

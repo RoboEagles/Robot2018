@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc4579.Robot2018.Robot;
 import org.usfirst.frc4579.instrumentation.EventLogging;
+import org.usfirst.frc4579.instrumentation.Instrumentation;
 
 /**
  *
@@ -55,6 +56,7 @@ public class drive extends Command {
     	SmartDashboard.putNumber("Flow Motion Y: ", Robot.measurement.getFlowMotionY());
 
     	// Update IMU data.
+    	Robot.measurement.read(Robot.driveTrain.isNotMoving(),Instrumentation.timeNow());
     	Robot.measurement.measure();
     	
     	Robot.driveTrain.joeyStickDrive();
