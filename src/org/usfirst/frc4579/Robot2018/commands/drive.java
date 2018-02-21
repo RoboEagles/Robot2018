@@ -47,7 +47,7 @@ public class drive extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
 
-    	EventLogging.logNormalEvent(EventLogging.NORMALEVENTS.START_EXECUTE_COMMAND, "DefaultDrive");
+    	//EventLogging.logNormalEvent(EventLogging.NORMALEVENTS.START_EXECUTE_COMMAND, "DefaultDrive");
     	
     	Robot.measurement.getCounts();
     	
@@ -56,8 +56,9 @@ public class drive extends Command {
     	SmartDashboard.putNumber("Flow Motion Y: ", Robot.measurement.getFlowMotionY());
 
     	// Update IMU data.
-    	Robot.measurement.read(Robot.driveTrain.isNotMoving(),Instrumentation.timeNow());
     	Robot.measurement.measure();
+    	
+    	SmartDashboard.putNumber("Robot Angle: ", Robot.measurement.getAngle());
     	
     	Robot.driveTrain.joeyStickDrive();
     	
@@ -65,7 +66,7 @@ public class drive extends Command {
     	SmartDashboard.putNumber("Joystick Y:", Robot.oi.driveStick.getY());
 
     	
-    	EventLogging.logNormalEvent(EventLogging.NORMALEVENTS.END_EXECUTE_COMMAND,   "DefaultDrive");
+    	//EventLogging.logNormalEvent(EventLogging.NORMALEVENTS.END_EXECUTE_COMMAND,   "DefaultDrive");
 
     }
 

@@ -43,7 +43,7 @@ public class lift extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	System.out.println("Lifting");
+    	//System.out.println("Lifting");
     	Robot.lifter.testUp();
     	//SmartDashboard.putNumber("IRValue", (double)Robot.lifter.getHeight());
     	//double goal = (Robot.oi.everyStick.getThrottle() + 1)/2 * Robot.lifter.maxHeight;

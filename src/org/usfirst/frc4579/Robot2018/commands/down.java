@@ -21,7 +21,7 @@ public class down extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	System.out.println("Going Down");
+    	//System.out.println("Going Down");
     	Robot.lifter.testDown();
     	Robot.lifter.updateHeight();
     	SmartDashboard.putNumber("IRValue", (double)Robot.lifter.getHeight());

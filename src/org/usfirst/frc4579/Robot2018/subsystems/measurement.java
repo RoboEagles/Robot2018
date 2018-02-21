@@ -11,6 +11,7 @@
 
 package org.usfirst.frc4579.Robot2018.subsystems;
 
+import org.usfirst.frc4579.Robot2018.Robot;
 import org.usfirst.frc4579.Robot2018.RobotMap;
 import org.usfirst.frc4579.Robot2018.commands.*;
 import org.usfirst.frc4579.instrumentation.DebugTextFile;
@@ -62,12 +63,12 @@ public class measurement extends Subsystem {
 		opticSensor.reset();
 	}
 	
-	public int getX(){
-		return opticSensor.deltaX;
-	}
-	public int getY(){
-		return opticSensor.deltaY;
-	}
+//	public int getX(){
+//		return opticSensor.deltaX;
+//	}
+//	public int getY(){
+//		return opticSensor.deltaY;
+//	}
 	
 	
 	//------------------------ Gyro Methods ------------------------------//
@@ -158,7 +159,6 @@ public class measurement extends Subsystem {
 	
 	// Compute accelerometer and range data.
 	public void measure() {
-	System.out.println(mpuAvailable);
 		if (mpuAvailable) {
 		
 		// Compute change in time since last computations.
@@ -168,14 +168,16 @@ public class measurement extends Subsystem {
 			firstCall = false;
 		}
 		double deltaT = time - lastTime;
-		System.out.println(deltaT);
+		//System.out.println(deltaT);
 		
 		lastTime = time;
 
+		// Get latest accelerometer data.
+		mpu.read(Robot.driveTrain.isNotMoving(), time);
 		
 		/*
 		// Compute new distance vector.
-		double dX = velocityX * deltaT;
+		double dX = velocityX * deltaT;1
 		distanceX += dX;
 		double dY = velocityY * deltaT;
 		distanceY += dY;
@@ -186,7 +188,7 @@ public class measurement extends Subsystem {
 		// Compute new angular data.
 		robotAngleRateZ = mpu.getGyroRateZ();
 		robotAngleZ    += robotAngleRateZ * deltaT;
-		System.out.println(robotAngleRateZ);
+//		System.out.println(robotAngleRateZ);
 		//double angleRateY = mpu.getGyroRateY();
 		//robotAngleY    += angleRateY * deltaT;
 		//double angleRateX = mpu.getGyroRateX();

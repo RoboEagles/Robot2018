@@ -81,8 +81,8 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData("Auto mode", chooser);
         
         // Creating a camera and setting resolution
-        UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-        camera.setResolution(426, 240);
+        //UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+        //camera.setResolution(426, 240);
         
         Robot.measurement.initialize();
     }
@@ -123,12 +123,12 @@ public class Robot extends TimedRobot {
     	DigitalInput centerSwitch = new DigitalInput(1);
     	DigitalInput sideSwitch = new DigitalInput(2);
     	
-    	/*if(RobotMap.switchescenterSwitch.get()) {
+    	if(centerSwitch.get()) {
     		inCenter = true;
     	}
-    	else if(RobotMap.switchesleftSwitch.get() || RobotMap.switchesrightSwitch.get()){
+    	else if(sideSwitch.get()){
     		inSide = true;
-    	}*/
+    	}
     	
     	// Edits the direction according to what switch we are going for
     	if (Robot.gameData == 'L') {

@@ -175,7 +175,7 @@ public class driveTrain extends Subsystem {
 	}  
     
     public void driveStraight(double speed) {
-	    double halfCorrection = ((Robot.measurement.getAngleRate() * .006) + (Robot.measurement.getAngle() * .016)) /2.0;
+	    double halfCorrection = ((Robot.measurement.getAngleRate() * .006) + (Robot.measurement.getAngle() * .028)) /2.0;
 	    leftMotor.set(speed + halfCorrection);
 	    rightMotor.set(speed - halfCorrection);
     }

@@ -47,7 +47,7 @@ public class MPU6050_I2C {
 	AxisData zAccelData = new AxisData("zAccel", 0.5, numCalibrationSamples, 1.0);
 	AxisData xGyroData  = new AxisData("xGyro" , 0.7, numCalibrationSamples, 0.0);
 	AxisData yGyroData  = new AxisData("yGyro" , 0.7, numCalibrationSamples, 0.0);
-	AxisData zGyroData  = new AxisData("zGyro" , 0.7, numCalibrationSamples, 0.0);
+	AxisData zGyroData  = new AxisData("zGyro" , 0.23, numCalibrationSamples, 0.0);
 	
 	DebugTextFile allAxisRawDataFile = new DebugTextFile("allAxisScaledMPUData", true, "xAccelRaw\tyAccelRaw\tzAccelRaw\txGyroRaw\tyGyroRaw\tzGyroRaw\tTemp", 30000);
 
@@ -166,8 +166,10 @@ public class MPU6050_I2C {
 		
         mpuAvailable = true;
 	
-		zGyroData .computeRawAndScaledValue( READS[12], READS[13], gyroScaleFactor);
-		
+		zGyroData.computeRawAndScaledValue( READS[12], READS[13], gyroScaleFactor);
+//		System.out.print(zGyroData.rawValue);
+//		System.out.print("  ");
+//		System.out.println(zGyroData.correctedValue);
 		int temp = ((int)READS[6] << 8) | (READS[7] & 0xff);
 		tempF      = (double) temp * 0.0052941 + 97.754;
 		

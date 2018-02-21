@@ -82,7 +82,7 @@ public class lifter extends PIDSubsystem {
     public void updateHeight(){
     	direction = (int)Math.signum(liftMotor.get());		// To tell whether to add or subtract the change in height
     	
-    	height += (getCounts() - lastHeight) * direction;
+    	height -= (getCounts() - lastHeight) * direction;
     	
     	//Updates the last height
     	lastHeight = getCounts();
@@ -121,11 +121,11 @@ public class lifter extends PIDSubsystem {
     
     //------------------------- Test Code ----------------------------//
     public void testUp(){
-    	liftMotor.set(-.6);
+    	liftMotor.set(-.75);
     }
     
     public void testDown(){
-    	liftMotor.set(.3);
+    	liftMotor.set(.4);
     }
     
     // Goes back to the start position for the lifter

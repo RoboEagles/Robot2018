@@ -70,10 +70,10 @@ public class gripper extends Subsystem {
     	return holding;
     }
     
+    
     // Toggles whether the robot should hold the cube or not
     public void changeHold(){
-    	if(holding)holding = false;
-    	else holding = true;
+    	holding = !holding;
     }
     
     // Has the arm hold the box
@@ -135,7 +135,7 @@ public class gripper extends Subsystem {
 
         // Set the default command for a subsystem here.
         // setDefaultCommand(new MySpecialCommand());
-    	setDefaultCommand(new holdCube());
+    	//setDefaultCommand(new holdCube());
     	
     }
 }

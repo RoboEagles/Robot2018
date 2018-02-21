@@ -7,20 +7,20 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class calibrate extends Command{
+	public double speed = 0.0;
 
 	    // Called just before this Command runs the first time
 	    protected void initialize() {
-	    	setTimeout(10.0);
+	    	setTimeout(8.0);
 	    	Robot.measurement.reset();  //Reset the flow sensor accumulator.
 	    }
 
 	    // Called repeatedly when this Command is scheduled to run
 	    protected void execute() {
-	    	Robot.measurement.read(Robot.driveTrain.isNotMoving(), Instrumentation.timeNow());
 	    	Robot.measurement.measure();
-	    	
-	    	Robot.driveTrain.joeyAutoDrive(0.3, 0.0);
-	    	System.out.println(Robot.measurement.getFlowMotionX());
+	    	speed += 0.04;
+	    	if (speed > 0.5) speed = 0.5;
+	    	Robot.driveTrain.driveStraight(speed);
 	    }
 
 	    // Make this return true when this Command no longer needs to run execute()
