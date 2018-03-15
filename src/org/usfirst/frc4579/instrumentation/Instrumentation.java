@@ -48,7 +48,7 @@ public abstract class Instrumentation {
 
 				//System.out.println(mainPath);
 
-				instrAvailable  = true;
+				instrAvailable  = false;
 
 				runsPath = mainPath + "/runs";
 

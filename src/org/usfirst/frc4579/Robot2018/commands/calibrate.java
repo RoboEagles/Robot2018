@@ -12,7 +12,7 @@ public class calibrate extends Command{
 	    // Called just before this Command runs the first time
 	    protected void initialize() {
 	    	setTimeout(8.0);
-	    	Robot.measurement.reset();  //Reset the flow sensor accumulator.
+	    	Robot.measurement.resetMPU();  //Reset the flow sensor accumulator.
 	    }
 
 	    // Called repeatedly when this Command is scheduled to run

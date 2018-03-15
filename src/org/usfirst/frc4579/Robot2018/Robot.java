@@ -21,10 +21,11 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import flowSensor.FlowMotion;
 
 import org.usfirst.frc4579.Robot2018.commands.*;
 import org.usfirst.frc4579.Robot2018.subsystems.*;
+
+import com.eagles.sensors.FlowMotion;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -96,7 +97,7 @@ public class Robot extends TimedRobot {
     public void disabledInit(){
     	//Robot.lifter.toStart();
     	Robot.lifter.resetCounter();
-    	Robot.measurement.reset();
+    	Robot.measurement.resetMPU();
     	Robot.measurement.resetFlowMotion();
     	Robot.gripper.reset();
     }
@@ -118,6 +119,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
+    	Robot.lifter.updateHeight();
+    	Robot.measurement.getCounts();
+    	Robot.measurement.measure();
         Scheduler.getInstance().run();
     }
 
@@ -135,7 +139,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        Scheduler.getInstance().run();
         Robot.lifter.updateHeight();
+        Robot.measurement.getCounts();
+        Robot.measurement.measure();
+        Scheduler.getInstance().run();
     }
 }

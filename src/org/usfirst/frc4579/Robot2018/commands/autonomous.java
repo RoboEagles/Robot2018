@@ -24,16 +24,11 @@ import org.usfirst.frc4579.Robot2018.subsystems.*;
 public class autonomous extends CommandGroup {
 
 	// Checks whether to run the code for the center or side configurations
-	DigitalInput centerSwitch = new DigitalInput(1);
-	DigitalInput sideSwitch = new DigitalInput(2);
+	public static DigitalInput centerSwitch = new DigitalInput(1);
+	public static DigitalInput sideSwitch = new DigitalInput(2);
 	
-	public int direction;
-
-	public int[] autoDirections = {600,200};
-	public double[] autoAngles = {90,180};
-
 	// Gets the game data needed for the autonomous period
-    final char gameData = DriverStation.getInstance().getGameSpecificMessage().charAt(0);
+    final static String gameData = DriverStation.getInstance().getGameSpecificMessage();
     
     // Stores what the robot configuration is during autonomous
 	boolean inCenter = false;
@@ -50,39 +45,15 @@ public class autonomous extends CommandGroup {
     	if(centerSwitch.get()) {
     		inCenter = true;
     	}
-    	else if(sideSwitch.get()){
+    	else{
     		inSide = true;
     	}
     	
-    	// Edits the direction according to what switch we are going for
-    	if (Robot.gameData == 'L') {
-    		direction = 1;
-    	}
-    	else {
-    		direction = -1;
-    	}
         // To run multiple commands at the same time,
         // use addParallel()
         // e.g. addParallel(new Command1());
         //      addSequential(new Command2());
         // Command1 and Command2 will run in parallel.
-        // Gets the game data needed for the autonomous period
-        //final char gameData = DriverStation.getInstance().getGameSpecificMessage().charAt(0);
-        
-        // Stores what the robot configuration is during autonomous
-    	boolean inCenter = false;
-    	boolean inSide = false;
-    	
-    	// Checks whether to run the code for the center or side configurations
-    	DigitalInput centerSwitch = new DigitalInput(1);
-    	DigitalInput sideSwitch = new DigitalInput(2);
-    	
-    	if(centerSwitch.get()) {
-    		inCenter = true;
-    	}
-    	else if(sideSwitch.get()){
-    		inSide = true;
-    	}
     	
         // A command group will require all of the subsystems that each member
         // would require.

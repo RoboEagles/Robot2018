@@ -180,6 +180,12 @@ public class driveTrain extends Subsystem {
 	    rightMotor.set(speed - halfCorrection);
     }
     
+    public void driveStraightReference(double speed, double reference){
+	    double halfCorrection = ((Robot.measurement.getAngleRate() * .006) + ((Robot.measurement.getAngle()-reference) * .028)) /2.0;
+	    leftMotor.set(speed + halfCorrection);
+	    rightMotor.set(speed - halfCorrection); 
+    }
+    
     public void stop(){
     	leftMotor.stopMotor();
     	rightMotor.stopMotor();

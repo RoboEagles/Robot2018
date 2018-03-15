@@ -1,4 +1,4 @@
-package flowSensor;
+package com.eagles.sensors;
 
 import java.nio.ByteBuffer;
 import edu.wpi.first.wpilibj.SPI;
