@@ -42,7 +42,7 @@ public class gripper extends Subsystem {
     
     
     boolean firstOpen = true;
-    boolean holding = false;
+    boolean holding = true;
     DigitalInput boxSwitch = new DigitalInput(3);
     
     //----------------- Methods for the Movement Motor -----------------------//
@@ -73,7 +73,7 @@ public class gripper extends Subsystem {
     
     // Toggles whether the robot should hold the cube or not
     public void changeHold(){
-    	holding = !holding;
+//    	holding = !holding;
     }
     
     // Has the arm hold the box

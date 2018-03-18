@@ -1,6 +1,9 @@
 package com.eagles.sensors;
 
 import java.nio.ByteBuffer;
+
+import org.usfirst.frc4579.filters.AverageFilter;
+
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.Timer;
@@ -9,12 +12,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 public class FlowMotion extends SensorBase  {
 	// Variables for the SPI interface and sensor data.
 	private SPI flow = new SPI(SPI.Port.kOnboardCS0);
-	private ByteBuffer regBuffer = ByteBuffer.allocate(2);  //SPI transaction buffer.
+	private ByteBuffer regBuffer = ByteBuffer.allocate(12);    //SPI transaction buffer.
+	private ByteBuffer longBuffer = ByteBuffer.allocate(12);   //SPI transaction buffer.
 	private byte[] counts = new byte[5];					//Byte buffer for received data.
 	private int oldDeltaX, oldDeltaY;						//Previous readings.
 	public int deltaX, deltaY;								//Current readings.
 	public int accumDeltaX, accumDeltaY = 0;				//Accumulated readings.
 	public double rateX, rateY = 0.0;						//Calculated instantaneous motion rate, counts/sec.
+	public AverageFilter filteredDeltaX = new AverageFilter(5);
+	public AverageFilter filteredDeltaY = new AverageFilter(5);
 	
 	public void reset(){
 		accumDeltaX = 0;
@@ -22,35 +28,53 @@ public class FlowMotion extends SensorBase  {
 	}
 	
 	public void getCounts() {
-		final double newTime, deltaTime, oldTime = 0.0;		//delta time variables.
+		double newTime, deltaTime, oldTime = 0.0;		//delta time variables.
 		newTime = Timer.getFPGATimestamp();	
 		deltaTime = newTime - oldTime;
-		for (int i=0; i<counts.length; i++)  {          //Make 5 register reads.
-			regBuffer.put(0, (byte)(i+2));              //Start with Reg No. 0x02.
-			flow.transaction(regBuffer, regBuffer, 2);  //Do the SPI transaction.
-			counts[i] = regBuffer.get(1);               //Get the returned byte into the array.
-		}
+		oldTime = newTime;
+		
+		regBuffer.put(0, (byte)(2));              //Start with Reg No. 0x02.
+		flow.transaction(regBuffer, longBuffer, 12);  //Do the SPI transaction.
+		for (int i=0; i<5; i++) counts[i] = longBuffer.get(i);  //Get the returned bytes into the array.
+
 		//Diagnostic: print the byte at Reg 02.
 		//Convert the returned bytes to signed int's.
 		deltaX = (counts[2] << 8) | (counts[1] & 0x000000FF);
 		deltaY = (counts[4] << 8) | (counts[3] & 0x000000FF);
+		System.out.printf(" %02X  %02X%02X  %02X%02X  %d\n", (byte)counts[0], (byte)counts[2], (byte)counts[1], (byte)counts[4], (byte)counts[3], deltaX);
+		/*Alternate diagnostic code segment to print out all the sensor registers, in hex.
+		System.out.printf(" %02X", (byte)longBuffer.get(0));                         //Motion
+		System.out.printf(" %02X%02X", (byte)longBuffer.get(2), longBuffer.get(1));  //deltaX
+		System.out.printf(" %02X%02X", (byte)longBuffer.get(4), longBuffer.get(3));  //deltaY
+		System.out.printf(" %02X", (byte)longBuffer.get(5));                         //Squal
+		System.out.printf(" %02X", (byte)longBuffer.get(6));                         //RawData_Sum
+		System.out.printf(" %02X", (byte)longBuffer.get(7));                         //Maximum_RawData
+		System.out.printf(" %02X", (byte)longBuffer.get(8));                         //Minimum_RawData
+		System.out.printf(" %02X%02X", (byte)longBuffer.get(10), longBuffer.get(9)); //Shutter
+		System.out.println();
+		*/
+		
 		//Test for motion, and zero the data if none.
  		if ((byte)(counts[0] & 0x80) != (byte)0x80) {
  			deltaX = 0;
  			deltaY = 0;
  		}
-		if (Math.abs(deltaX) > 124)  {
-			deltaX = oldDeltaX;	//Reject spurious readings.
-			System.out.printf("*** Max deltaX!  %02x%02x%02x%02x%02x\n", (byte)counts[0], (byte)counts[1], (byte)counts[2], (byte)counts[3], (byte)counts[4]);
-		}
+// 		deltaX = (int)((.5*deltaX)+(.5*oldDeltaX));
+// 		deltaY = (int)((.5*deltaY)+(.5*oldDeltaY));
+ 		
+
+		//		if (Math.abs(deltaX) > 250)  {
+//			deltaX = oldDeltaX;	//Reject spurious readings.
+//			System.out.printf("*** Max deltaX!  %02x%02x%02x%02x%02x\n", (byte)counts[0], (byte)counts[1], (byte)counts[2], (byte)counts[3], (byte)counts[4]);
+//		}
 //		if (Math.abs(deltaY) > 124)  {
 //			deltaY = oldDeltaY;
 //			System.out.printf("*** Max deltaX!  %02x%02x%02x%02x%02x\n", (byte)counts[0], (byte)counts[1], (byte)counts[2], (byte)counts[3], (byte)counts[4]);
 //		}
 		oldDeltaX = deltaX;									//Save the newest readings.
 		oldDeltaY = deltaY;
-		accumDeltaX += deltaX;								//Accumulate the latest readings.
-		accumDeltaY += deltaY;
+		accumDeltaX += filteredDeltaX.filter(deltaX);		//Accumulate the latest readings.
+		accumDeltaY += filteredDeltaY.filter(deltaY);
 		rateX = deltaX /  deltaTime;						//Calculate the rates.
 		rateY = deltaY /  deltaTime;
 	//End of getCounts().
@@ -94,7 +118,9 @@ public class FlowMotion extends SensorBase  {
 		
 		if (chipId == (byte)0x49 && dIpihc == (byte)0xB6) {
 			System.out.println("Motion Sensor is on line!");
-			//Read one set of counts to initialize (per Arduino code).
+			registerWrite((byte)0x3A, (byte)0x5A);  //Power On Reset.  new command.  JGH
+			Timer.delay(0.005);
+			//Read one set of counts to initialize.
 			getCounts();
 		
 			Timer.delay(0.001);
@@ -140,11 +166,11 @@ public class FlowMotion extends SensorBase  {
 		    registerWrite((byte)0x64, (byte)0xFF);
 		    registerWrite((byte)0x65, (byte)0x1F);
 		    registerWrite((byte)0x7F, (byte)0x14);
-		    registerWrite((byte)0x65, (byte)0x60);
+		    registerWrite((byte)0x65, (byte)0x67);  //was 0x60. JGH
 		    registerWrite((byte)0x66, (byte)0x08);
-		    registerWrite((byte)0x63, (byte)0x78);
+		    registerWrite((byte)0x63, (byte)0x70);  //was 0x78. JGH
 		    registerWrite((byte)0x7F, (byte)0x15);
-		    registerWrite((byte)0x48, (byte)0x58);
+		    registerWrite((byte)0x48, (byte)0x48);  //was 0x58. JGH
 		    registerWrite((byte)0x7F, (byte)0x07);
 		    registerWrite((byte)0x41, (byte)0x0D);
 		    registerWrite((byte)0x43, (byte)0x14);
@@ -157,27 +183,29 @@ public class FlowMotion extends SensorBase  {
 		    registerWrite((byte)0x7F, (byte)0x07);
 		    registerWrite((byte)0x40, (byte)0x41);
 		    registerWrite((byte)0x70, (byte)0x00);
-		    Timer.delay(0.1);  //Delay 100 milliseconds.
+		    Timer.delay(0.01);  //Delay 10 milliseconds.  was 100msec. JGH
 		    registerWrite((byte)0x32, (byte)0x44);
 		    registerWrite((byte)0x7F, (byte)0x07);
 		    registerWrite((byte)0x40, (byte)0x40);
 		    registerWrite((byte)0x7F, (byte)0x06);
-		    registerWrite((byte)0x62, (byte)0xf0);
+		    registerWrite((byte)0x62, (byte)0xF0);
 		    registerWrite((byte)0x63, (byte)0x00);
 		    registerWrite((byte)0x7F, (byte)0x0D);
 		    registerWrite((byte)0x48, (byte)0xC0);
-		    registerWrite((byte)0x6F, (byte)0xd5);
+		    registerWrite((byte)0x6F, (byte)0xD5);
 		    registerWrite((byte)0x7F, (byte)0x00);
-		    registerWrite((byte)0x5B, (byte)0xa0);
+		    registerWrite((byte)0x5B, (byte)0xA0);
 		    registerWrite((byte)0x4E, (byte)0xA8);
 		    registerWrite((byte)0x5A, (byte)0x50);
 		    registerWrite((byte)0x40, (byte)0x80);
+		    registerWrite((byte)0x7F, (byte)0x00);  //new command.  JGH
+		    registerWrite((byte)0x5A, (byte)0x10);  //new command.  JGH
+		    registerWrite((byte)0x54, (byte)0x00);  //new command.  JGH
 		    System.out.println("End of sensor performance settings.");
 			return true;
 		}
 		return false;
-	// End of Init().
-	}
+	}  // End of Init().
 
 	@Override
 	public void initSendable(SendableBuilder builder) {

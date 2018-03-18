@@ -37,8 +37,8 @@ import com.eagles.sensors.FlowMotion;
 public class Robot extends TimedRobot {
 
 	// Variable for storing the data that tells the robot configuration
-    public static final char gameData = 0;
-    
+    //public static final char gameData = ' ';
+    //
 	Command autonomousCommand;
     SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -84,6 +84,8 @@ public class Robot extends TimedRobot {
         // Creating a camera and setting resolution
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setResolution(426, 240);
+        //camera.setFPS(12);
+     //   camera.setPixelFormat(kGrey);
         
         Robot.measurement.initialize();
     }

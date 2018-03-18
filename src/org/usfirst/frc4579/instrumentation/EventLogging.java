@@ -73,6 +73,7 @@ public class EventLogging extends Instrumentation {
 		// Create the directory to hold the events file.
 		super();
 		logAvailable = instrumentationAvailable();
+		logAvailable = false;  //Added to avoid logging failures. JGH
 	}
 
 	// Invoke the constructor to set up the instrumentation file structure.

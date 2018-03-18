@@ -10,6 +10,7 @@
 
 
 package org.usfirst.frc4579.Robot2018.commands;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -51,21 +52,18 @@ public class sideAuto extends Command {
 	protected void initialize() {
 		step = 0;
 		turnLocation = 0.0;
-	
-		if(autonomous.sideSwitch.get()){
-			// Pathway for when the robot is on the right and our switch is on the right
-			if(autonomous.gameData.charAt(0) == 'R') directions = new double[]{2,0};
-			
+		
+    	// Gets the game data needed for the autonomous period
+    	String gameData = DriverStation.getInstance().getGameSpecificMessage();
+		
+		if(autonomous.sideSwitch.get()){	
 			// Pathway for when the robot is on the right and our switch is on the left
-			else directions = new double[] {2,-90,.5,90,1,0};  
+			directions = new double[] {3.0,0};  
 		}
 		
-		else {
-			// Pathway for when the robot is on the left and our switch is on the left
-			if(autonomous.gameData.charAt(0) == 'L') directions = new double[]{5,0};
-			
+		else {			
 			// Pathway for when the robot is on the left and our switch is on the right
-			else directions = new double[] {5,0};
+			directions = new double[] {3.0,0};
 		}
 		
 		timer.reset();
@@ -81,7 +79,7 @@ public class sideAuto extends Command {
 			
 			// Drives the robot straight until it reaches the goal
 			if(timer.get() < directions[step]){
-				Robot.driveTrain.driveStraightReference(.3,turnLocation);
+				Robot.driveTrain.driveStraightReference(.4,turnLocation);
 			}
 			
 			else if (timer.get() >= directions[step]){
@@ -118,14 +116,15 @@ public class sideAuto extends Command {
 			}
 		}
 		SmartDashboard.putNumber("Real Angle: ", Robot.measurement.getRobotAngle());
+		
 	}
 	
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return directions[step] == 0;
+		return (directions[step] == 0);
 	}
-	
+	 
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
@@ -133,6 +132,9 @@ public class sideAuto extends Command {
 		System.out.println("Side Auto End*****");
 		step = 0;
 		turnLocation = 0;
+//		Robot.gripper.moveLeft(1);
+//		Timer.delay(2);
+//		Robot.gripper.stopLeft();
 	}
 	
 	// Called when another command which requires one or more of the same

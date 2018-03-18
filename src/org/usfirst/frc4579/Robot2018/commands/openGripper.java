@@ -39,7 +39,7 @@ public class openGripper extends Command {
     @Override
     protected void initialize() {
     	setTimeout(.5);
-    	System.out.println("Starting .1 Sec Timeout");
+    	System.out.println("Starting .5 Sec Timeout");
     }
 
     // Called repeatedly when this Command is scheduled to run
