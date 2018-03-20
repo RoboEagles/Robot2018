@@ -47,38 +47,22 @@ public class gripper extends Subsystem {
     
     //----------------- Methods for the Movement Motor -----------------------//
     // Used to make the first time that the robot
-    public boolean isFirstOpen(){
-    	if(firstOpen){
-    		firstOpen = false;
-    		return true;
-    	}
-    	return firstOpen;
-    }
+//    public boolean isFirstOpen(){
+//    	if(firstOpen){
+//    		firstOpen = false;
+//    		return true;
+//    	}
+//    	return firstOpen;
+//    }
     
     // Opens the gripper
     public void openGripper(){
-    	movementMotor.set(.75);
+    	movementMotor.set(-.75);
     }
     
     // Closes the gripper
     public void closeGripper(){
-    	movementMotor.set(-.75);
-    }
-    
-    //----------------------- Methods for Holdng the Cube ------------------------//
-    public boolean isHolding(){
-    	return holding;
-    }
-    
-    
-    // Toggles whether the robot should hold the cube or not
-    public void changeHold(){
-//    	holding = !holding;
-    }
-    
-    // Has the arm hold the box
-    public void holdingBox(){
-    	if(holding)movementMotor.set(-.1);
+    	movementMotor.set(.75);
     }
     
     // Stops the movement motor
@@ -121,7 +105,7 @@ public class gripper extends Subsystem {
     //------------------ Reset Method --------------------------//
     
     public void reset(){
-    	firstOpen = true;
+//    	firstOpen = true;
     	holding = false;
     	closeGripper();
     	Timer.delay(2);

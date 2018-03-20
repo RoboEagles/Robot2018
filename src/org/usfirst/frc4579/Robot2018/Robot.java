@@ -84,9 +84,7 @@ public class Robot extends TimedRobot {
         // Creating a camera and setting resolution
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setResolution(426, 240);
-        //camera.setFPS(12);
-     //   camera.setPixelFormat(kGrey);
-        
+
         Robot.measurement.initialize();
     }
     
