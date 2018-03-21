@@ -44,7 +44,7 @@ public class lift extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	//System.out.println("Lifting");
-    	Robot.lifter.testUp();
+    	Robot.lifter.moveUp();
     	//SmartDashboard.putNumber("IRValue", (double)Robot.lifter.getHeight());
     	//double goal = (Robot.oi.everyStick.getThrottle() + 1)/2 * Robot.lifter.maxHeight;
     	//Robot.lifter.setSetpoint(goal);
@@ -52,7 +52,7 @@ public class lift extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return Robot.oi.everyStick.getRawButtonReleased(8);  //JGH shouldn't this return the button state?
     }
 
     // Called once after isFinished returns true

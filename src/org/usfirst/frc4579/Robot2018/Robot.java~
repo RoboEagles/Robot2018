@@ -13,6 +13,7 @@ package org.usfirst.frc4579.Robot2018;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -20,10 +21,11 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import flowSensor.FlowMotion;
 
 import org.usfirst.frc4579.Robot2018.commands.*;
 import org.usfirst.frc4579.Robot2018.subsystems.*;
+
+import com.eagles.sensors.FlowMotion;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -35,8 +37,8 @@ import org.usfirst.frc4579.Robot2018.subsystems.*;
 public class Robot extends TimedRobot {
 
 	// Variable for storing the data that tells the robot configuration
-    public static final char gameData = 0;
-    
+    //public static final char gameData = ' ';
+    //
 	Command autonomousCommand;
     SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -82,7 +84,8 @@ public class Robot extends TimedRobot {
         // Creating a camera and setting resolution
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setResolution(426, 240);
-        
+
+        Robot.measurement.initialize();
     }
     
 
@@ -94,6 +97,9 @@ public class Robot extends TimedRobot {
     public void disabledInit(){
     	//Robot.lifter.toStart();
     	Robot.lifter.resetCounter();
+    	Robot.measurement.resetMPU();
+    	Robot.measurement.resetFlowMotion();
+    	Robot.gripper.reset();
     }
 
     @Override
@@ -106,29 +112,6 @@ public class Robot extends TimedRobot {
         autonomousCommand = chooser.getSelected();
         // schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.start();
-        
-        // Gets the game data needed for the autonomous period
-        final char gameData = DriverStation.getInstance().getGameSpecificMessage().charAt(0);
-        
-        // Stores what the robot configuration is during autonomous
-    	boolean inCenter = false;
-    	boolean inSide = false;
-    	
-    	// Checks whether to run the code for the center or side configurations
-    	/*if(RobotMap.switchescenterSwitch.get()) {
-    		inCenter = true;
-    	}
-    	else if(RobotMap.switchesleftSwitch.get() || RobotMap.switchesrightSwitch.get()){
-    		inSide = true;
-    	}*/
-    	
-    	// Edits the direction according to what switch we are going for
-    	if (Robot.gameData == 'L') {
-    		int direction = 1;
-    	}
-    	else {
-    		int direction = -1;
-    	}
     }
 
     /**
@@ -136,6 +119,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
+    	Robot.lifter.updateHeight();
+    	Robot.measurement.getCounts();
+    	Robot.measurement.measure();
         Scheduler.getInstance().run();
     }
 
@@ -153,6 +139,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        Robot.lifter.updateHeight();
+        Robot.measurement.getCounts();
+        Robot.measurement.measure();
         Scheduler.getInstance().run();
     }
 }

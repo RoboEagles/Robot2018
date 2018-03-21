@@ -13,8 +13,6 @@ package org.usfirst.frc4579.Robot2018;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -25,7 +23,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc4579.Robot2018.commands.*;
 import org.usfirst.frc4579.Robot2018.subsystems.*;
 
-import com.eagles.sensors.FlowMotion;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,9 +33,6 @@ import com.eagles.sensors.FlowMotion;
  */
 public class Robot extends TimedRobot {
 
-	// Variable for storing the data that tells the robot configuration
-    //public static final char gameData = ' ';
-    //
 	Command autonomousCommand;
     SendableChooser<Command> chooser = new SendableChooser<>();
 

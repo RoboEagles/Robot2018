@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class down extends Command {
 
     public down() {
-        // Use requires() here to declare subsystem dependencies
+        // Use requires() here to declare subsystem dependencies  //JGH you're missing this element for the PID.
         // eg. requires(chassis);
     }
 
@@ -22,14 +22,14 @@ public class down extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	//System.out.println("Going Down");
-    	Robot.lifter.testDown();
+    	Robot.lifter.moveDown();
     	Robot.lifter.updateHeight();
     	SmartDashboard.putNumber("IRValue", (double)Robot.lifter.getHeight());
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return Robot.oi.everyStick.getRawButtonReleased(9);
     }
 
     // Called once after isFinished returns true

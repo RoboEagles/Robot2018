@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc4579.Robot2018.Robot;
 import org.usfirst.frc4579.instrumentation.EventLogging;
+import org.usfirst.frc4579.instrumentation.Instrumentation;
 
 /**
  *
@@ -40,6 +41,7 @@ public class drive extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.measurement.initFlowMotion();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -47,8 +49,16 @@ public class drive extends Command {
 
     	//EventLogging.logNormalEvent(EventLogging.NORMALEVENTS.START_EXECUTE_COMMAND, "DefaultDrive");
     	
+    	Robot.measurement.getCounts();
+    	
+    	SmartDashboard.putNumber("Flow Motion X: ", Robot.measurement.getFlowMotionX());
+
+    	SmartDashboard.putNumber("Flow Motion Y: ", Robot.measurement.getFlowMotionY());
+
     	// Update IMU data.
     	Robot.measurement.measure();
+    	
+    	SmartDashboard.putNumber("Robot Angle: ", Robot.measurement.getAngle());
     	
     	Robot.driveTrain.joeyStickDrive();
     	

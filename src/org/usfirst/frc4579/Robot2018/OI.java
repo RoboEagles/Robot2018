@@ -100,8 +100,6 @@ public class OI {
         JoystickButton dropButton = new JoystickButton(everyStick, 9);
         dropButton.whileHeld(new down());
         
-     //   XboxController xbox = new XboxController(3);
-        
         
     }
 

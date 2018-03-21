@@ -43,7 +43,6 @@ public class gripper extends Subsystem {
     
     boolean firstOpen = true;
     boolean holding = true;
-    DigitalInput boxSwitch = new DigitalInput(3);
     
     //----------------- Methods for the Movement Motor -----------------------//
     // Used to make the first time that the robot
@@ -57,7 +56,7 @@ public class gripper extends Subsystem {
     
     // Opens the gripper
     public void openGripper(){
-    	movementMotor.set(-.75);
+    	movementMotor.set(-.75);   //JGH probably need to increase this to account for stiffer springs.
     }
     
     // Closes the gripper
@@ -72,7 +71,7 @@ public class gripper extends Subsystem {
     
     
     //-------------------Methods for the Left Motor -----------------------//
-    public void moveLeft(double speed){
+    public void spinLeft(double speed){ 
     	// Runs the left motor in one direction
     	leftGripper.set(speed * -1.0);
     }
@@ -85,7 +84,7 @@ public class gripper extends Subsystem {
     
     
     //------------------ Methods for the Right Motor ---------------------//
-    public void moveRight(double speed){
+    public void spinRight(double speed){
     	// Runs the right motor in one direction
     	rightGripper.set(speed);
     }
@@ -104,8 +103,7 @@ public class gripper extends Subsystem {
     
     //------------------ Reset Method --------------------------//
     
-    public void reset(){
-//    	firstOpen = true;
+    public void reset(){     //JGH  this probably is no longer needed.  The whole concept of a first open versus second open is not needed.
     	holding = false;
     	closeGripper();
     	Timer.delay(2);

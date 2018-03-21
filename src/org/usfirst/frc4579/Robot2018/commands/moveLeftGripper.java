@@ -42,13 +42,13 @@ public class moveLeftGripper extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-    	Robot.gripper.moveLeft(1);
+    	Robot.gripper.spinLeft(1.0);  //JGH 1 should be 1.0, it's a double.
     }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        return false;
+        return Robot.oi.everyStick.getRawButtonReleased(3);  //JGH shouldn't this return the button state?
     }
 
     // Called once after isFinished returns true
