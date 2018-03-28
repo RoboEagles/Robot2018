@@ -41,27 +41,16 @@ public class gripper extends Subsystem {
     // here. Call these from Commands.
     
     
-    boolean firstOpen = true;
-    boolean holding = true;
-    
     //----------------- Methods for the Movement Motor -----------------------//
-    // Used to make the first time that the robot
-//    public boolean isFirstOpen(){
-//    	if(firstOpen){
-//    		firstOpen = false;
-//    		return true;
-//    	}
-//    	return firstOpen;
-//    }
-    
+  
     // Opens the gripper
     public void openGripper(){
-    	movementMotor.set(-.75);   //JGH probably need to increase this to account for stiffer springs.
+    	movementMotor.set(.75);   //JGH probably need to increase this to account for stiffer springs.
     }
     
     // Closes the gripper
     public void closeGripper(){
-    	movementMotor.set(.75);
+    	movementMotor.set(-.75);
     }
     
     // Stops the movement motor
@@ -94,6 +83,12 @@ public class gripper extends Subsystem {
     	rightGripper.stopMotor();
     }
     
+    public void stopGripper(){
+    	stopRight();
+    	stopLeft();
+    }
+    
+    
     //------------------ Methods for Ejecting the Cube --------------------//
     public void eject(double speed){
     	// Runs both motors in the other direction
@@ -104,7 +99,6 @@ public class gripper extends Subsystem {
     //------------------ Reset Method --------------------------//
     
     public void reset(){     //JGH  this probably is no longer needed.  The whole concept of a first open versus second open is not needed.
-    	holding = false;
     	closeGripper();
     	Timer.delay(2);
     	stopMovement();

@@ -82,7 +82,7 @@ public class sideAuto extends Command {
 				Robot.driveTrain.driveStraightReference(.4,turnLocation);
 			}
 			
-			else if (timer.get() >= directions[step]){
+			else{
 				// Resets the timer so that the next run will start at 0 seconds
 				timer.stop();
 				timer.reset();
@@ -96,13 +96,13 @@ public class sideAuto extends Command {
 		}
 		
 		// The part of the code where it is turning
-		else if (step%2 == 1){
+		else{
 			// The robots distance from its goal
-			double distance = targetAngle - turnLocation;
+			double distance = targetAngle - turnLocation;   //JGH  we should rethink how we do this.
 			
 			if(Math.abs(distance) > .5){
 				// Turns the robot
-				Robot.driveTrain.joeyAutoDrive(0, (-0.8 * Math.signum(directions[step])));
+				Robot.driveTrain.joeyStickDrive(0, (-0.8 * Math.signum(directions[step])));
 				
 				// Updates the robots current angle
 				turnLocation = Robot.measurement.getAngle();	
@@ -110,8 +110,8 @@ public class sideAuto extends Command {
 			else {
 				// Stops and updates where the robot is in the path
 				Robot.driveTrain.stop();
-				timer.start();
 				timer.reset();
+				timer.start();
 				step++;
 			}
 		}
@@ -132,9 +132,9 @@ public class sideAuto extends Command {
 		System.out.println("Side Auto End*****");
 		step = 0;
 		turnLocation = 0;
-//		Robot.gripper.moveLeft(1);
-//		Timer.delay(2);
-//		Robot.gripper.stopLeft();
+		Robot.gripper.spinLeft(1);
+		Timer.delay(2);
+		Robot.gripper.stopLeft();
 	}
 	
 	// Called when another command which requires one or more of the same

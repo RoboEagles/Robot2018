@@ -39,20 +39,19 @@ public class openGripper extends Command {
     @Override
     protected void initialize() {
     	setTimeout(.5);
-    	System.out.println("Starting .5 Sec Timeout");
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
     	if (!isTimedOut()) Robot.gripper.openGripper();
-    	if (isTimedOut()) Robot.gripper.stopMovement();
+    	if (isTimedOut()) Robot.gripper.stopMovement();  //Stop motor before button is opened.
     }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-    	return (isTimedOut() & !Robot.oi.openButton.get());
+    	return (isTimedOut() || !Robot.oi.openButton.get());   //JGH shouldn't this be an OR operator?
     }
 
     // Called once after isFinished returns true

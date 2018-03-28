@@ -50,7 +50,6 @@ public class centerAuto extends Command {
     @Override
     protected void initialize() {
     	setTimeout(30);
-    	startTime = Timer.getFPGATimestamp();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -95,7 +94,6 @@ public class centerAuto extends Command {
     @Override
     protected void end() {
     	Robot.driveTrain.stop();
-    	System.out.println("Total Auto Time: " + (Timer.getFPGATimestamp() - startTime) + "s");
     	speed = 0.0;
     	increment = .005;
     	Robot.measurement.resetFlowMotion();

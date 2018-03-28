@@ -56,15 +56,24 @@ public class sideAuto extends Command {
     	// Gets the game data needed for the autonomous period
     	String gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
-		if(autonomous.sideSwitch.get()){	
-			// Pathway for when the robot is on the right and our switch is on the left
-			directions = new double[] {3.0,0};  
-		}
-		
-		else {			
-			// Pathway for when the robot is on the left and our switch is on the right
-			directions = new double[] {3.0,0};
-		}
+    	if(autonomous.sideSwitch.get()){
+    		if(gameData.charAt(0) == 'R'){
+    			// Pathway for when the robot is on the right and our switch is on the right
+    			directions = new double[] {3.0,-90,0};
+    		}
+    		else{
+    			directions = new double[]{4.0,-90,4.0,0};
+    		}
+    	}
+    	else {
+    		if(gameData.charAt(0) == 'L'){
+    			// Pathway for when the robot is on the left and our switch is on the left
+    			directions = new double[] {3.0,90,0};
+    		}
+    		else{
+    			directions = new double[]{4.0,90,4.0,0};
+    		}
+    	}
 		
 		timer.reset();
 		timer.start();
@@ -132,9 +141,9 @@ public class sideAuto extends Command {
 		System.out.println("Side Auto End*****");
 		step = 0;
 		turnLocation = 0;
-//		Robot.gripper.moveLeft(1);
-//		Timer.delay(2);
-//		Robot.gripper.stopLeft();
+		Robot.gripper.spinLeft(1);
+		Timer.delay(2);
+		Robot.gripper.stopLeft();
 	}
 	
 	// Called when another command which requires one or more of the same

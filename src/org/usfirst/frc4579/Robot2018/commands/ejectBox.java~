@@ -45,13 +45,13 @@ public class ejectBox extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return Robot.oi.everyStick.getRawButtonReleased(7);  //JGH shouldn't this return the button state?
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	    	Robot.gripper.stopLeft();
-    	    	Robot.gripper.stopRight();
+    	Robot.gripper.stopLeft();
+    	Robot.gripper.stopRight();
     }
 
     // Called when another command which requires one or more of the same

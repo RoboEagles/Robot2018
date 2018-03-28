@@ -41,7 +41,6 @@ public class drive extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.measurement.initFlowMotion();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -60,7 +59,7 @@ public class drive extends Command {
     	
     	SmartDashboard.putNumber("Robot Angle: ", Robot.measurement.getAngle());
     	
-    	Robot.driveTrain.joeyStickDrive();
+    	Robot.driveTrain.joeyStickDrive(Robot.oi.driveStick.getX(), Robot.oi.driveStick.getY());   //JGH we should modify joeyStickDrive to take inputs.
     	
     	SmartDashboard.putNumber("Joystick X:", Robot.oi.driveStick.getX());
     	SmartDashboard.putNumber("Joystick Y:", Robot.oi.driveStick.getY());

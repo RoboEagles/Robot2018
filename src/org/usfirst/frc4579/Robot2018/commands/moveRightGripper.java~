@@ -42,13 +42,13 @@ public class moveRightGripper extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-    	Robot.gripper.moveRight(1);
+    	Robot.gripper.spinRight(1.0);  //JGH 1 should be 1.0.
     }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        return false;
+        return Robot.oi.everyStick.getRawButtonReleased(2);   //JGH what causes this command to end?????
     }
 
     // Called once after isFinished returns true
