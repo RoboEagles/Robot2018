@@ -12,6 +12,8 @@
 package org.usfirst.frc4579.Robot2018.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc4579.Robot2018.Robot;
 
 /**
@@ -47,6 +49,7 @@ public class autoDropCube extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+    	SmartDashboard.putNumber("IR Value: ", Robot.lifter.getHeight());
     	if(Robot.lifter.getHeight() < 50) Robot.lifter.moveUp();
     	else{
     		timer.start();

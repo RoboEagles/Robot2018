@@ -143,8 +143,7 @@ public class measurement extends Subsystem {   //JGH  this whole thing should be
 		velocityX        = 0.0;
 		velocityY        = 0.0;
 		distanceX        = 0.0;
-		distanceY        = 0.0;
-		robotAngleZ      = 0.0;  
+		distanceY        = 0.0; 
 		robotAngleRateZ  = 0.0;
 		robotAngleZ      = 0.0;
 		robotAngleY      = 0.0;

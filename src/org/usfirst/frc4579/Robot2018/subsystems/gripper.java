@@ -45,12 +45,12 @@ public class gripper extends Subsystem {
   
     // Opens the gripper
     public void openGripper(){
-    	movementMotor.set(.75);   //JGH probably need to increase this to account for stiffer springs.
+    	movementMotor.set(-.75);   //JGH probably need to increase this to account for stiffer springs.
     }
     
     // Closes the gripper
     public void closeGripper(){
-    	movementMotor.set(-.75);
+    	movementMotor.set(.75);
     }
     
     // Stops the movement motor

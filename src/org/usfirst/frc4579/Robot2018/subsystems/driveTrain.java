@@ -67,15 +67,15 @@ public class driveTrain extends Subsystem {
     	return (leftMotor.get() == 0.0) && (rightMotor.get() == 0.0);
     }
     
-    public void joeyStickDrive(double x, double y) { //The finest drive code known to man.  //JGH this should be modified to accept joystick or non-joystick inputs.
+    public void joeyStickDrive(double x, double y) { //The finest drive code known to man.
 		
     	//Read the gyro and the driveStick.
-		double gz = Robot.measurement.getAngleRate();   //JGH does this cause a measurement?  Should be either here or in the Command, not both.
+		double gz = Robot.measurement.getAngleRate();
 		double frwd = -y;	//forward-back driveStick, speed control.
 		double turn = x;	    //left-right driveStick, turn control.
 
 		//Lower limits for the driveStick, stop the motors.
-		if (Math.abs(turn) < 0.05 && Math.abs(frwd) < 0.05) {  //JGH this should be changed to 0.05 based on observed joystick data.
+		if (Math.abs(turn) < 0.05 && Math.abs(frwd) < 0.05) { 
 			turn = 0.0;
 			frwd = 0.0;
 			gz = 0.0;

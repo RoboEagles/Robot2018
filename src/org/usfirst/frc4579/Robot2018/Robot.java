@@ -113,8 +113,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-    	Robot.lifter.updateHeight();
-    	Robot.measurement.getCounts();
+//    	Robot.lifter.updateHeight();
+//    	Robot.measurement.getCounts();
     	Robot.measurement.measure();
         Scheduler.getInstance().run();
     }
@@ -133,8 +133,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        Robot.lifter.updateHeight();
-        Robot.measurement.getCounts();
+//        Robot.lifter.updateHeight();
+//        Robot.measurement.getCounts();
         Robot.measurement.measure();
         Scheduler.getInstance().run();
     }

@@ -41,7 +41,7 @@ public class FlowMotion extends SensorBase  {
 		//Convert the returned bytes to signed int's.
 		deltaX = (counts[2] << 8) | (counts[1] & 0x000000FF);
 		deltaY = (counts[4] << 8) | (counts[3] & 0x000000FF);
-		System.out.printf(" %02X  %02X%02X  %02X%02X  %d\n", (byte)counts[0], (byte)counts[2], (byte)counts[1], (byte)counts[4], (byte)counts[3], deltaX);
+		//System.out.printf(" %02X  %02X%02X  %02X%02X  %d\n", (byte)counts[0], (byte)counts[2], (byte)counts[1], (byte)counts[4], (byte)counts[3], deltaX);
 		/*Alternate diagnostic code segment to print out all the sensor registers, in hex.
 		System.out.printf(" %02X", (byte)longBuffer.get(0));                         //Motion
 		System.out.printf(" %02X%02X", (byte)longBuffer.get(2), longBuffer.get(1));  //deltaX

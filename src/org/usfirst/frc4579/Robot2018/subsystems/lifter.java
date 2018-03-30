@@ -128,7 +128,7 @@ public class lifter extends PIDSubsystem {
     
     //------------------------- Test Code ----------------------------//
     public void moveUp(){
-    	liftMotor.set(-.75);   //JGH  really, only 75%?
+    	liftMotor.set(-1);   //JGH  really, only 75%?
     }
     
     public void moveDown(){
