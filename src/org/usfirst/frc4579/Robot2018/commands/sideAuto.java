@@ -45,6 +45,8 @@ public class sideAuto extends Command {
 					targetAngle;
 	public double[] directions;
 	
+	public boolean firstStart = true;
+	
 	// The robots distance from its goal
 	double distance;
 	
@@ -55,6 +57,7 @@ public class sideAuto extends Command {
 	protected void initialize() {
 		step = 0;
 		turnLocation = 0.0;
+		
 		
     	// Gets the game data needed for the autonomous period
     	String gameData = DriverStation.getInstance().getGameSpecificMessage();
@@ -68,7 +71,7 @@ public class sideAuto extends Command {
     		}
     		else{
     			SmartDashboard.putString("Auto Config: ", "Switch to the Left and Robot to the Right");
-    			directions = new double[]{5.0,90,4.0,90,0};
+    			directions = new double[]{5.5,90,3.0,90,0};
     		}
     	}
     	else {
@@ -79,7 +82,7 @@ public class sideAuto extends Command {
     		}
     		else{
     			SmartDashboard.putString("Auto Config: ", "Switch to the Right and Robot to the Left");
-    			directions = new double[]{5.0,-90,4.0,-90,0};
+    			directions = new double[]{5.5,-90,3.0,-90,0};
     		}
     	}
 		
@@ -90,6 +93,15 @@ public class sideAuto extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
+		
+		/*if(firstStart){
+			if(timer.get() > 9) {
+				firstStart = false;
+				timer.stop();
+				timer.reset();
+			}
+				
+		}*/
 		
 		// The part of the code where it drives straight
 		if(step%2 == 0){
@@ -108,7 +120,7 @@ public class sideAuto extends Command {
 			
 			if(Math.abs(distance) > .5){
 				// Turns the robot
-				Robot.driveTrain.joeyStickDrive((-0.8 * Math.signum(directions[step])), 0);
+				Robot.driveTrain.joeyStickDrive((-1.0 * Math.signum(directions[step])), 0);
 				
 				// Updates the robots current angle
 				turnLocation = Robot.measurement.getAngle();	

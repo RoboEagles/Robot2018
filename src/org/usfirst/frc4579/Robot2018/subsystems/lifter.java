@@ -132,7 +132,7 @@ public class lifter extends PIDSubsystem {
     }
     
     public void moveDown(){
-    	liftMotor.set(.4);
+    	liftMotor.set(1.0);
     }
     
     // Goes back to the start position for the lifter

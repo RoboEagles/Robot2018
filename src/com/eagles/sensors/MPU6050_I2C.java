@@ -148,7 +148,8 @@ public class MPU6050_I2C {
 
         		MPU.read(REGSITER_INTERRUPT_STATUS, 1, interruptStatus);
         		dataReady = interruptStatus[0] & 0x01;
-        		timeout   = readTimer.get() >= 1.0;
+//        		timeout   = readTimer.get() >= 1.0;
+        		timeout   = readTimer.get() >= 0.01;
 
         	} while ((dataReady == 0) & !timeout);
 
