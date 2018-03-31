@@ -67,22 +67,22 @@ public class sideAuto extends Command {
     		if(gameData.charAt(0) == 'R'){
     			// Pathway for when the robot is on the right and our switch is on the right
     			SmartDashboard.putString("Auto Config: ", "Switch to the Right and Robot to the Right");
-    			directions = new double[] {4.0,90,0};
+    			directions = new double[] {4.0,90,-1,0};
     		}
     		else{
     			SmartDashboard.putString("Auto Config: ", "Switch to the Left and Robot to the Right");
-    			directions = new double[]{5.5,90,3.0,90,0};
+    			directions = new double[]{5.5,90,3.0,90,-1,0};
     		}
     	}
     	else {
     		if(gameData.charAt(0) == 'L'){
     			// Pathway for when the robot is on the left and our switch is on the left
     			SmartDashboard.putString("Auto Config: ", "Switch to the Left and Robot to the Left");
-    			directions = new double[] {4.0,-90,0};
+    			directions = new double[] {4.0,-90,-1,0};
     		}
     		else{
     			SmartDashboard.putString("Auto Config: ", "Switch to the Right and Robot to the Left");
-    			directions = new double[]{5.5,-90,3.0,-90,0};
+    			directions = new double[]{5.5,-90,3.0,-90,-1,0};
     		}
     	}
 		
@@ -94,19 +94,11 @@ public class sideAuto extends Command {
 	@Override
 	protected void execute() {
 		
-		/*if(firstStart){
-			if(timer.get() > 9) {
-				firstStart = false;
-				timer.stop();
-				timer.reset();
-			}
-				
-		}*/
-		
 		// The part of the code where it drives straight
 		if(step%2 == 0){
 			if(directions[step] < 0 && timer.get() < Math.abs(directions[step])){
 				Robot.gripper.spinRight(1);
+				if(timer.get() > .5) Robot.gripper.openGripper();
 			}
 			// Drives the robot straight until it reaches the goal
 			if(timer.get() < directions[step] && directions[step] > 0){

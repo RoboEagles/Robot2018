@@ -38,6 +38,8 @@ public class autoDropCube extends Command {
     }
 
     Timer timer = new Timer();
+    boolean cubeGrabbed = false;
+    
     
     // Called just before this Command runs the first time
     @Override
@@ -49,12 +51,25 @@ public class autoDropCube extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+    	
+    	if(!cubeGrabbed){
+    		if(timer.get() < 1.5) {
+    			Robot.gripper.openGripper();
+    		}
+    		else if(timer.get() < )
+    	}
+    	
     	SmartDashboard.putNumber("IR Value: ", Robot.lifter.getHeight());
-    	if(Robot.lifter.getHeight() < 50) Robot.lifter.moveUp();
-    	else{
-    		timer.start();
-    		Robot.lifter.stopLift();
-    		Robot.gripper.eject(1); 
+    	else(cubeGrabbed){
+    		if(Robot.lifter.getHeight() < 50) {
+    			Robot.lifter.moveUp();
+    		}
+    	
+    		else{
+    			timer.start();
+    			Robot.lifter.stopLift();
+    			Robot.gripper.eject(1); 
+    		}
     	}
     }
 
