@@ -53,20 +53,25 @@ public class autoDropCube extends Command {
     protected void execute() {
     	
     	if(!cubeGrabbed){
-    		if(timer.get() < 1.5) {
-    			Robot.gripper.openGripper();
+    		Robot.gripper.spinLeft(1);
+    		Robot.gripper.spinRight(1);
+    		Robot.driveTrain.joeyStickDrive(1, 0);
+    		
+    		if(timer.get() > 1.0) {
+    			cubeGrabbed = true;
+    			timer.reset();
     		}
-    		else if(timer.get() < )
     	}
     	
-    	SmartDashboard.putNumber("IR Value: ", Robot.lifter.getHeight());
-    	else(cubeGrabbed){
+    	else{
+    		Robot.gripper.closeGripper();
+    		timer.start();
+    		
     		if(Robot.lifter.getHeight() < 50) {
     			Robot.lifter.moveUp();
     		}
     	
     		else{
-    			timer.start();
     			Robot.lifter.stopLift();
     			Robot.gripper.eject(1); 
     		}

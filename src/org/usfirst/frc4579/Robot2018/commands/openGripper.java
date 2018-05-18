@@ -46,6 +46,8 @@ public class openGripper extends Command {
     protected void execute() {
     	if (!isTimedOut()) Robot.gripper.openGripper();
     	if (isTimedOut()) Robot.gripper.stopMovement();  //Stop motor before button is opened.
+    	Robot.gripper.spinLeft(1);
+    	Robot.gripper.spinRight(1);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -58,6 +60,7 @@ public class openGripper extends Command {
     @Override
     protected void end() {
     	Robot.gripper.stopMovement();
+    	Robot.gripper.stopGripper();
     }
 
     // Called when another command which requires one or more of the same

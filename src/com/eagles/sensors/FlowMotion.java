@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 
 import org.usfirst.frc4579.filters.AverageFilter;
 
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.Timer;
@@ -21,6 +22,7 @@ public class FlowMotion extends SensorBase  {
 	public double rateX, rateY = 0.0;						//Calculated instantaneous motion rate, counts/sec.
 	public AverageFilter filteredDeltaX = new AverageFilter(5);
 	public AverageFilter filteredDeltaY = new AverageFilter(5);
+	private DigitalOutput chipSelect = new DigitalOutput(9);
 	
 	public void reset(){
 		accumDeltaX = 0;
@@ -34,15 +36,19 @@ public class FlowMotion extends SensorBase  {
 		oldTime = newTime;
 		
 		regBuffer.put(0, (byte)(2));              //Start with Reg No. 0x02.
+		chipSelect.set(false);                    //Drop the chip select line for the sensor.
+		for (int i=0; i<11000; i++) {}            //Delay 50usec.
 		flow.transaction(regBuffer, longBuffer, 12);  //Do the SPI transaction.
 		for (int i=0; i<5; i++) counts[i] = longBuffer.get(i);  //Get the returned bytes into the array.
-
+		//for (int i=0; i<11000; i++) {}            //Delay 50usec.
+		chipSelect.set(true);					  //Raise the chip select line.
+		
 		//Diagnostic: print the byte at Reg 02.
 		//Convert the returned bytes to signed int's.
 		deltaX = (counts[2] << 8) | (counts[1] & 0x000000FF);
 		deltaY = (counts[4] << 8) | (counts[3] & 0x000000FF);
 		//System.out.printf(" %02X  %02X%02X  %02X%02X  %d\n", (byte)counts[0], (byte)counts[2], (byte)counts[1], (byte)counts[4], (byte)counts[3], deltaX);
-		/*Alternate diagnostic code segment to print out all the sensor registers, in hex.
+		//*Alternate diagnostic code segment to print out all the sensor registers, in hex.
 		System.out.printf(" %02X", (byte)longBuffer.get(0));                         //Motion
 		System.out.printf(" %02X%02X", (byte)longBuffer.get(2), longBuffer.get(1));  //deltaX
 		System.out.printf(" %02X%02X", (byte)longBuffer.get(4), longBuffer.get(3));  //deltaY
@@ -51,8 +57,10 @@ public class FlowMotion extends SensorBase  {
 		System.out.printf(" %02X", (byte)longBuffer.get(7));                         //Maximum_RawData
 		System.out.printf(" %02X", (byte)longBuffer.get(8));                         //Minimum_RawData
 		System.out.printf(" %02X%02X", (byte)longBuffer.get(10), longBuffer.get(9)); //Shutter
+		System.out.print("  "+deltaX);
+		System.out.print("  "+deltaY);
 		System.out.println();
-		*/
+		//*/
 		
 		//Test for motion, and zero the data if none.
  		if ((byte)(counts[0] & 0x80) != (byte)0x80) {
@@ -84,7 +92,11 @@ public class FlowMotion extends SensorBase  {
 		  regBuffer.put(0, (byte)(reg | 0x80));				//The high bit required by the sensor reg address.
 		  regBuffer.put(1, (byte)value);
 		  //System.out.printf("Reg Write: %02x%02x\n", writeBuffer.get(0), writeBuffer.get(1));
+		  chipSelect.set(false);                    //Drop the chip select line for the sensor.
+		  for (int i=0; i<11000; i++) {}            //Delay 50usec.
 		  flow.transaction(regBuffer, regBuffer, 2);		//Simple SPI transaction.
+		  //for (int i=0; i<11000; i++) {}            //Delay 50usec.
+		  chipSelect.set(true);                    //Raise the chip select line for the sensor.
 	  }
 	  
 	  public boolean init() {
@@ -100,19 +112,32 @@ public class FlowMotion extends SensorBase  {
 		// Power on reset the sensor.
 		regBuffer.put(0, (byte)0x3A);				//Send these two addresses to the Flow Breakout to POR.
 		regBuffer.put(1, (byte)0x5A);
+		chipSelect.set(false);                    //Drop the chip select line for the sensor.
+		for (int i=0; i<11000; i++) {}            //Delay 50usec.
 		flow.write(regBuffer, 2);
-	    //System.out.println("End of Sensor Power On Reset.");
+		//for (int i=0; i<11000; i++) {}            //Delay 50usec.
+		chipSelect.set(true);                    //Raise the chip select line for the sensor.
+
+	    System.out.println("End of Flow Sensor Power On Reset.");
 		
 	    Timer.delay(.005);  // 5 millisecond delay
 
 	    // Test the SPI communication, checking chipId and inverse chipId
 		regBuffer.put(0, (byte)0x00);
+		chipSelect.set(false);                    //Drop the chip select line for the sensor.
+		for (int i=0; i<11000; i++) {}            //Delay 50usec.
 		flow.transaction(regBuffer, regBuffer, 2);
 		System.out.printf("chipId:  %02x    %02x\n", (byte)0x49, regBuffer.get(1));
 		byte chipId = regBuffer.get(1);
+		//for (int i=0; i<11000; i++) {}            //Delay 50usec.
+		chipSelect.set(true);                    //Raise the chip select line for the sensor.
 		
 		regBuffer.put(0, (byte)0x5F);
+		chipSelect.set(false);                    //Drop the chip select line for the sensor.
+		for (int i=0; i<11000; i++) {}            //Delay 50usec.
 		flow.transaction(regBuffer, regBuffer, 2); 
+		//for (int i=0; i<11000; i++) {}            //Delay 50usec.
+		chipSelect.set(true);                    //Raise the chip select line for the sensor.
 		System.out.printf("dIpihc:  %02x    %02x\n", (byte)0xB6, regBuffer.get(1));
 		byte dIpihc = regBuffer.get(1);
 		

@@ -47,19 +47,13 @@ public class drive extends Command {
     protected void execute() {
 
     	//EventLogging.logNormalEvent(EventLogging.NORMALEVENTS.START_EXECUTE_COMMAND, "DefaultDrive");
-    	
-    	Robot.measurement.getCounts();
-    	
-    	SmartDashboard.putNumber("Flow Motion X: ", Robot.measurement.getFlowMotionX());
-
-    	SmartDashboard.putNumber("Flow Motion Y: ", Robot.measurement.getFlowMotionY());
 
     	// Update IMU data.
     	Robot.measurement.measure();
     	
     	SmartDashboard.putNumber("Robot Angle: ", Robot.measurement.getAngle());
-    	
-    	Robot.driveTrain.joeyStickDrive(Robot.oi.driveStick.getX(), Robot.oi.driveStick.getY());   //JGH we should modify joeyStickDrive to take inputs.
+    	if(Robot.oi.driveStick.getRawButton(2)) Robot.driveTrain.joeyStickDrive(Robot.oi.driveStick.getX(), -Robot.oi.driveStick.getY());
+    	else Robot.driveTrain.joeyStickDrive(Robot.oi.driveStick.getX(), Robot.oi.driveStick.getY());
     	
     	SmartDashboard.putNumber("Joystick X:", Robot.oi.driveStick.getX());
     	SmartDashboard.putNumber("Joystick Y:", Robot.oi.driveStick.getY());

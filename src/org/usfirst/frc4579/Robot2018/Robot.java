@@ -81,6 +81,7 @@ public class Robot extends TimedRobot {
         camera.setFPS(12);
 
         Robot.measurement.initialize();
+        Robot.measurement.initFlowMotion();
     }
     
 
@@ -115,7 +116,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
 //    	Robot.lifter.updateHeight();
-//    	Robot.measurement.getCounts();
+    	Robot.measurement.getCounts();
     	Robot.measurement.measure();
         Scheduler.getInstance().run();
     }
@@ -135,7 +136,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
 //        Robot.lifter.updateHeight();
-//        Robot.measurement.getCounts();
+        Robot.measurement.getCounts();
         Robot.measurement.measure();
         Scheduler.getInstance().run();
     }

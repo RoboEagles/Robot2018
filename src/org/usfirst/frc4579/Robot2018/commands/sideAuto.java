@@ -67,22 +67,22 @@ public class sideAuto extends Command {
     		if(gameData.charAt(0) == 'R'){
     			// Pathway for when the robot is on the right and our switch is on the right
     			SmartDashboard.putString("Auto Config: ", "Switch to the Right and Robot to the Right");
-    			directions = new double[] {4.0,90,-1,0};
+    			directions = new double[] {1.0,90,-1,0};
     		}
     		else{
     			SmartDashboard.putString("Auto Config: ", "Switch to the Left and Robot to the Right");
-    			directions = new double[]{5.5,90,3.0,90,-1,0};
+    			directions = new double[]{1.0,90,3.0,90,-1,0};
     		}
     	}
     	else {
     		if(gameData.charAt(0) == 'L'){
     			// Pathway for when the robot is on the left and our switch is on the left
     			SmartDashboard.putString("Auto Config: ", "Switch to the Left and Robot to the Left");
-    			directions = new double[] {4.0,-90,-1,0};
+    			directions = new double[] {3.0,-90,-1,0};
     		}
     		else{
     			SmartDashboard.putString("Auto Config: ", "Switch to the Right and Robot to the Left");
-    			directions = new double[]{5.5,-90,3.0,-90,-1,0};
+    			directions = new double[]{4.0,-90,3.0,-90,-1,0};
     		}
     	}
 		
@@ -97,12 +97,14 @@ public class sideAuto extends Command {
 		// The part of the code where it drives straight
 		if(step%2 == 0){
 			if(directions[step] < 0 && timer.get() < Math.abs(directions[step])){
+				Robot.gripper.spinLeft(1);
 				Robot.gripper.spinRight(1);
-				if(timer.get() > .5) Robot.gripper.openGripper();
+				if(timer.get() > .35) Robot.gripper.openGripper();
 			}
 			// Drives the robot straight until it reaches the goal
 			if(timer.get() < directions[step] && directions[step] > 0){
 				Robot.driveTrain.driveStraightReference(.4,turnLocation);
+				System.out.println("Time: " + timer.get());
 			}
 		}
 		
@@ -110,22 +112,29 @@ public class sideAuto extends Command {
 		else if (step%2 == 1){
 			distance = targetAngle - turnLocation;   //JGH  we should rethink how we do this.
 			
+			System.out.printf("  %d   %d\n", targetAngle, turnLocation);
+			
 			if(Math.abs(distance) > .5){
 				// Turns the robot
 				Robot.driveTrain.joeyStickDrive((-1.0 * Math.signum(directions[step])), 0);
 				
 				// Updates the robots current angle
 				turnLocation = Robot.measurement.getAngle();	
+				
+				System.out.println("Turn Location: " + turnLocation);
+				System.out.println("Distance: " + distance);
 			}
 		}
-		SmartDashboard.putNumber("Real Angle: ", Robot.measurement.getRobotAngle());
 		
 	}
 	
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		if(step%2 == 0 && timer.get() > Math.abs(directions[step])){
+		if(directions[step] == 0){
+			return true;
+		}
+		else if(step%2 == 0 && timer.get() > Math.abs(directions[step])){
 			// Resets the timer so that the next run will start at 0 seconds
 			timer.stop();
 			timer.reset();
@@ -139,19 +148,18 @@ public class sideAuto extends Command {
 			step++;
 			
 			// The angle to be used for the turning part of the code
-			targetAngle = turnLocation + directions[step];
 			
 			distance = targetAngle - turnLocation;
 		}
 		
-		if(step%2 == 1 && Math.abs(distance) < .5){
+		else if(step%2 == 1 && Math.abs(distance) < .5){
 			// Stops and updates where the robot is in the path
 			Robot.driveTrain.stop();
 			timer.reset();
 			timer.start();
 			step++;
 		}
-		return (directions[step] == 0);
+		return false;
 	}
 	 
 	// Called once after isFinished returns true
