@@ -40,7 +40,8 @@ public class Robot extends IterativeRobot {
 	DifferentialDrive drive = new DifferentialDrive(leftSide, rightSide);
 //	MecanumDrive drive = new MecanumDrive(leftFront, leftRear, rightFront, rightRear);
 	Joystick stick = new Joystick(0);
-	FlowDeck motion = new FlowDeck(SPI.Port.kOnboardCS0, 10);		 
+	FlowDeck motion = new FlowDeck(SPI.Port.kOnboardCS0, 10);	
+	int accumX, accumY = 0;
 	
 	
 	// Define the FlowDeck motion sensor via the SPI interface.
@@ -330,11 +331,15 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		drive.driveCartesian(stick.getY(), stick.getX(), 0.0);
 		if (motion.goodSensor) {
-			System.out.printf("** %6d  %6d  %6d  %6d\n",motion.deltaX, motion.deltaY, motion.squal, motion.shutter);
+			drive.driveCartesian(stick.getY(), -stick.getX(), 0.0);
+			if (motion.readMotionCount() {
+				accumX += deltaX;
+				accumY += deltaY;
+//				System.out.printf("** %6d  %6d  %6d  %6d  %6d  %6d\n",motion.deltaX, motion.deltaY, accumX, accumY, motion.squal, motion.shutter);
+			}
 		}
-	}
+	}  //End of teleopPeriodic().
 
 	/**
 	 * This function is called periodically during test mode.
